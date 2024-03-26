@@ -7,17 +7,19 @@ public class Master {
 
         ServerSocket server;
 
+        // counter used for debugging purposes
+        int counter = 0;
+
         try {
             server = new ServerSocket(9090);
             while (true) {
                 System.out.println("Waiting for client request");
                 Socket client = server.accept();
-                System.out.println("Connected to client"
+                System.out.println("Connected to client "
                                     + client.getInetAddress().getHostAddress());
-
+                counter++;
                 ServerThread clientThread = new ServerThread(client);
-
-                new Thread(clientThread).start();
+                System.out.println("---- Total number of clients: " + counter);
             }
 
         }
