@@ -19,18 +19,9 @@ public class Master {
                                     + client.getInetAddress().getHostAddress());
                 counter++;
 
-                // Write data to the client's output stream
-                PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-                out.println("Hello, client " + counter);
-                out.flush();
-
-                // Create a new thread for the client
-                ServerThread clientThread = new ServerThread(client);
-
-                // Print for debugging purposes
-                System.out.println("---- Total number of clients: " + counter);
+                // create a new thread object
+                ServerThread thread = new ServerThread(client);
             }
-
         }
         catch(IOException e){
             System.out.println("Error: " + e);

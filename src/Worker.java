@@ -1,19 +1,20 @@
-/*
-*
-* Worker will accept key/value pair by the master
-* Perform the operation on the key/value pair
-* Create key2/value2 pair
-* Send it to Reducer
-*
-*/
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
-import java.util.Map;
+public class Worker extends Thread{
+    private Socket socket;
 
-public interface Worker {
+    public Worker(Socket socket) {
+        this.socket = socket;
 
-    public Map<Integer, String> data = null;
-
-    public void initialize();
-    public void sendToReducer(Map<Integer, String> data);
-
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String message = in.readLine();
+            System.out.println("Printed From Worker: Message from Master: " + message);
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
+    }
 }

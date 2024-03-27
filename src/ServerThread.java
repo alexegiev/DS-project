@@ -1,11 +1,6 @@
 import java.io.*;
 import java.net.*;
 
-/**
- * This thread is responsible to handle client connection.
- *
- * @author www.codejava.net
- */
 public class ServerThread extends Thread {
     private Socket socket;
 
@@ -16,6 +11,12 @@ public class ServerThread extends Thread {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String message = in.readLine();
             System.out.println("Message from Master: " + message);
+
+            // send message to worker
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println("Message from ServerThread");
+
+            Worker worker = new Worker(socket);
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
