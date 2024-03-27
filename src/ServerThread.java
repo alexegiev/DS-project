@@ -11,5 +11,13 @@ public class ServerThread extends Thread {
 
     public ServerThread(Socket socket) {
         this.socket = socket;
+
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String message = in.readLine();
+            System.out.println("Message from Master: " + message);
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
     }
 }
