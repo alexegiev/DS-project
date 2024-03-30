@@ -11,6 +11,7 @@ public class Room implements Serializable {
     // private fields
     boolean testing; // is used only for debugging purposes
     int roomCount = 0;
+    int roomIncrement = 0;
 
     public Room(int roomCount) {
         this.testing = false;
@@ -29,7 +30,12 @@ public class Room implements Serializable {
     public String toString() {
         return "Room{" +
                 "testing=" + testing +
-                "roomCount=" + roomCount +
+                ", roomCount=" + roomCount +
+                ", roomIncrement=" + roomIncrement +
                 '}';
+    }
+
+    public void incrementRoomIncrement() {
+        this.roomIncrement++;
     }
 }

@@ -27,11 +27,16 @@ public class Client extends Thread{
             requestSocket = new Socket("localhost", 9090);
 
             // create the streams to send and receive data from server
-            in = new ObjectInputStream(requestSocket.getInputStream());
             out = new ObjectOutputStream(requestSocket.getOutputStream());
+            in = new ObjectInputStream(requestSocket.getInputStream());
 
             // write object Room
             out.writeObject(roomTest);
+            out.flush();
+
+            // Wait and receive data from Master
+            out = new ObjectOutputStream(requestSocket.getOutputStream());
+            in = new ObjectInputStream(requestSocket.getInputStream());
             Room room = (Room) in.readObject();
 
             // print the received results (from Room.toString())
@@ -39,6 +44,9 @@ public class Client extends Thread{
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
+
+        } catch (SocketException se) {
+            System.err.println("Socket was closed unexpectedly!");
 
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -48,8 +56,15 @@ public class Client extends Thread{
 
         } finally {
             try {
-                in.close();	out.close();
-                requestSocket.close();
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+                if (requestSocket != null) {
+                    requestSocket.close();
+                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -58,7 +73,10 @@ public class Client extends Thread{
 
     public static void main(String args[]){
 
-        for (int i = 0; i < 50; i++)
-            new Client(new Room(i)).start();
+//        for (int i = 0; i < 10; i++)
+//            new Client(new Room(i)).start();
+
+        new Client(new Room(1)).start();
+
     }
 }
