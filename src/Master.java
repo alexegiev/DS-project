@@ -15,7 +15,8 @@ public class Master {
     ServerSocket server = null;
 
     // Define socket that is used to handle the connection
-    Socket serverSocket = null;
+    Socket clientSocket = null;
+    Socket reducerSocket = null;
 
     public static void main(String[] args){
 
@@ -28,12 +29,12 @@ public class Master {
             server = new ServerSocket(9090);
             while (true) {
                 System.out.println("Waiting for client request");
-                Socket client = server.accept();
+                clientSocket = server.accept();
                 System.out.println("Connected to client "
-                        + client.getInetAddress().getHostAddress());
+                        + clientSocket.getInetAddress().getHostAddress());
 
                 // create a new ServerThread object
-                Worker thread = new Worker(client);
+                Worker thread = new Worker(clientSocket);
 
                 thread.start();
             }
