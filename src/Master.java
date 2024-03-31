@@ -13,7 +13,6 @@ import entities.Room;
 public class Master {
 
     // Define socket that receives incoming requests
-    ServerSocket serverToClient = null;
     ServerSocket server = null;
 
     // Define socket that is used to handle the connection
@@ -23,6 +22,8 @@ public class Master {
     ObjectOutputStream clientOut = null;
     ObjectInputStream clientIn = null;
 
+    private static int clientCount = 1;
+
     public static void main(String[] args){
 
         new Master().startServer();
@@ -30,38 +31,11 @@ public class Master {
 
     void startServer() {
 
+        // Create a new ServerSocket object and wait for clients
         try {
             server = new ServerSocket(9090);
-            while (true) {
-                System.out.println("Waiting for client request");
-                clientSocket = server.accept();
-                System.out.println("Connected to client "
-                        + clientSocket.getInetAddress().getHostAddress());
-
-                // create a new ServerThread object
-                Worker thread = new Worker(clientSocket);
-                thread.start();
-
-                // Connect to the Reducer and receive data
-                System.out.println("Waiting for Reducer data");
-                reducerSocket = server.accept();
-                System.out.println("Connected to Reducer "
-                        + reducerSocket.getInetAddress().getHostAddress());
-
-                // Process data from Reducer
-                ObjectOutputStream reducerOut = new ObjectOutputStream(reducerSocket.getOutputStream());
-                ObjectInputStream reducerIn = new ObjectInputStream(reducerSocket.getInputStream());
-                Room testingRoom = (Room) reducerIn.readObject();
-
-                // Send data to the Client
-                ObjectOutputStream clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
-                ObjectInputStream clientIn = new ObjectInputStream(clientSocket.getInputStream());
-
-                // Send the Room object
-                clientOut.writeObject(testingRoom);
-                clientOut.flush();
-
-            }
+            System.out.println("Server started at port: " + server.getLocalPort());
+            waitForClient();
         }
         catch (SocketException e) {
             e.printStackTrace();
@@ -69,26 +43,64 @@ public class Master {
         catch(IOException e){
             System.out.println("Error: " + e);
             return;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (clientIn != null) {
-                    clientIn.close();
-                }
-                if (clientOut != null) {
-                    clientOut.close();
-                }
-                if (clientSocket != null) {
-                    clientSocket.close();
-                }
-                if (reducerSocket != null) {
-                    reducerSocket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+    }
 
+    void waitForClient() {
+        while (true) {
+            try {
+                System.out.println("Waiting for client request");
+                clientSocket = server.accept();
+                System.out.println("Client No. " + clientCount + " connected ");
+                clientCount++;
+
+                // create a new ServerThread object
+                ServerThread serverThread = new ServerThread(clientSocket);
+                serverThread.start();
+
+                //TODO: REDUCER
+//                // Connect to the Reducer and receive data
+//                reducerSocket = server.accept();
+//                System.out.println("Connected to Reducer");
+//
+//                // Process data from Reducer
+//                ObjectOutputStream reducerOut = new ObjectOutputStream(reducerSocket.getOutputStream());
+//                ObjectInputStream reducerIn = new ObjectInputStream(reducerSocket.getInputStream());
+//
+//                if (reducerIn.available() > 0) {
+//                    Room testingRoom = (Room) reducerIn.readObject();
+//                    System.out.println("Room: " + testingRoom.toString());
+//
+//                    // Send data to the Client
+//                    ObjectOutputStream clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
+//                    ObjectInputStream clientIn = new ObjectInputStream(clientSocket.getInputStream());
+//                    clientOut.writeObject(testingRoom);
+//                    clientOut.flush();
+//                }
+
+//                // Connect to the Reducer and receive data
+//                reducerSocket = server.accept();
+//                System.out.println("Connected to Reducer "
+//                        + reducerSocket.getInetAddress().getHostAddress());
+//
+//                // Process data from Reducer
+//                ObjectOutputStream reducerOut = new ObjectOutputStream(reducerSocket.getOutputStream());
+//                ObjectInputStream reducerIn = new ObjectInputStream(reducerSocket.getInputStream());
+//                Room testingRoom = (Room) reducerIn.readObject();
+//
+//                // Send data to the Client
+//                ObjectOutputStream clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
+//                ObjectInputStream clientIn = new ObjectInputStream(clientSocket.getInputStream());
+//
+//                // Send the Room object
+//                clientOut.writeObject(testingRoom);
+//                clientOut.flush();
+            }
+            catch(Exception e){
+                System.out.println("Error: " + e);
+                return;
+            }
+
+        }
     }
 }

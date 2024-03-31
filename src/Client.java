@@ -18,8 +18,8 @@ public class Client extends Thread{
 
         //Initialize socket and input/output streams
         Socket requestSocket = null;
-        ObjectInputStream in = null;
         ObjectOutputStream out = null;
+        ObjectInputStream in = null;
 
         try {
 
@@ -35,8 +35,6 @@ public class Client extends Thread{
             out.flush();
 
             // Wait and receive data from Master
-            out = new ObjectOutputStream(requestSocket.getOutputStream());
-            in = new ObjectInputStream(requestSocket.getInputStream());
             Room room = (Room) in.readObject();
 
             // print the received results (from Room.toString())
@@ -73,10 +71,8 @@ public class Client extends Thread{
 
     public static void main(String args[]){
 
-//        for (int i = 0; i < 10; i++)
-//            new Client(new Room(i)).start();
-
-        new Client(new Room(1)).start();
+        for (int i = 0; i < 10; i++)
+            new Client(new Room(i)).start();
 
     }
 }
