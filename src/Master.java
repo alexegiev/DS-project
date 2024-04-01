@@ -98,6 +98,7 @@ public class Master {
             }
             catch(Exception e){
                 System.out.println("Error: " + e);
+                e.printStackTrace();
                 return;
             }
 

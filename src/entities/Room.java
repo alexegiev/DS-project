@@ -12,6 +12,7 @@ public class Room implements Serializable {
     boolean testing; // is used only for debugging purposes
     int roomCount = 0;
     int roomIncrement = 0;
+    boolean receivedFromReducer = false;
 
     public Room(int roomCount) {
         this.testing = false;
@@ -26,12 +27,17 @@ public class Room implements Serializable {
         this.testing = testing;
     }
 
+    public void setReceivedFromReducer(boolean testing) {
+        this.receivedFromReducer = testing;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
                 "testing=" + testing +
                 ", roomCount=" + roomCount +
                 ", roomIncrement=" + roomIncrement +
+                ", receivedFromReducer=" + receivedFromReducer +
                 '}';
     }
 

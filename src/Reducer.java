@@ -37,7 +37,6 @@ public class Reducer {
                 // create a new WorkerThread object
                 ReducerThread reducerThread = new ReducerThread(workerSocket);
                 reducerThread.start();
-
             } catch (IOException e) {
                 System.out.println("Error: " + e);
             }

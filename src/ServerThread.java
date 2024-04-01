@@ -3,14 +3,19 @@ import entities.Room;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerThread extends Thread{
 
+    static ServerSocket fromReducer = null;
     Socket clientSocket;
 
-    public ServerThread(Socket clientSocket){
+    public ServerThread(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
+        if (fromReducer == null) {
+            fromReducer = new ServerSocket(9093);
+        }
     }
 
     public void run(){
@@ -20,6 +25,10 @@ public class ServerThread extends Thread{
 
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+
+        ObjectOutputStream outReducer = null;
+        ObjectInputStream inReducer = null;
+
         try {
             outClient = new ObjectOutputStream(clientSocket.getOutputStream());
             inClient = new ObjectInputStream(clientSocket.getInputStream());
@@ -32,13 +41,22 @@ public class ServerThread extends Thread{
             out.writeObject(testingRoom);
             out.flush();
 
-            // Get data from Worker
-            in = new ObjectInputStream(workerSocket.getInputStream());
-            Room room = (Room) in.readObject();
+            // Connect to Reducer and receive data
+            Socket reducerSocket = fromReducer.accept();
+            outReducer = new ObjectOutputStream(reducerSocket.getOutputStream());
+            inReducer = new ObjectInputStream(reducerSocket.getInputStream());
 
-            // Send data to Client
+            Room room = (Room) inReducer.readObject();
             outClient.writeObject(room);
             outClient.flush();
+
+//            // Get data from Worker
+//            in = new ObjectInputStream(workerSocket.getInputStream());
+//            Room room = (Room) in.readObject();
+//
+//            // Send data to Client
+//            outClient.writeObject(room);
+//            outClient.flush();
 
         } catch (IOException e) {
             throw new RuntimeException(e);

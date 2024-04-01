@@ -26,6 +26,15 @@ public class ReducerThread extends Thread {
 
             Room testingRoom = (Room) in.readObject();
             testingRoom.incrementRoomIncrement();
+            testingRoom.setReceivedFromReducer(true);
+
+            // Connect to ServerThread and send data
+            Socket serverSocket = new Socket("localhost", 9093);
+            ObjectOutputStream serverOut = new ObjectOutputStream(serverSocket.getOutputStream());
+            ObjectInputStream serverIn = new ObjectInputStream(serverSocket.getInputStream());
+            serverOut.writeObject(testingRoom);
+            serverOut.flush();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
