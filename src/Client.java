@@ -71,8 +71,7 @@ public class Client extends Thread{
 
     public static void main(String args[]){
 
-        for (int i = 0; i < 10; i++)
-            new Client(new Room(i)).start();
+        // TODO: Implement the client(Menu options, Manager or Renter, operations, etc.)
 
     }
 }

@@ -25,8 +25,9 @@ public class ReducerThread extends Thread {
             in = new ObjectInputStream(workerSocket.getInputStream());
 
             Room testingRoom = (Room) in.readObject();
-            testingRoom.incrementRoomIncrement();
-            testingRoom.setReceivedFromReducer(true);
+
+
+            //TODO: Implement operations on Room object with map/reduce
 
             // Connect to ServerThread and send data
             Socket serverSocket = new Socket("localhost", 9093);

@@ -23,7 +23,8 @@ public class WorkerThread extends Thread{
             in = new ObjectInputStream(masterSocket.getInputStream());
 
             Room testingRoom = (Room) in.readObject();
-            testingRoom.incrementRoomIncrement();
+
+            //TODO: Implement operations on Room object with map/reduce
 
             out.writeObject(testingRoom);
             out.flush();
