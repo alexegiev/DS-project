@@ -1,0 +1,29 @@
+[
+  {
+    "roomName": "room1",
+    "roomId": 1,
+    "managerId": 1,
+    "area": "area1",
+    "rating": 1.5,
+    "numberOfReviews": 5,
+    "roomImage": "image1.jpg"
+  },
+  {
+    "roomName": "room2",
+    "roomId": 2,
+    "managerId": 2,
+    "area": "area2",
+    "rating": 2.5,
+    "numberOfReviews": 10,
+    "roomImage": "image2.jpg"
+  },
+  {
+    "roomName": "room3",
+    "roomId": 3,
+    "managerId": 3,
+    "area": "area3",
+    "rating": 3.5,
+    "numberOfReviews": 15,
+    "roomImage": "image3.jpg"
+  }
+]
