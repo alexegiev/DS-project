@@ -34,7 +34,7 @@ public class ServerThread extends Thread{
             inClient = new ObjectInputStream(clientSocket.getInputStream());
             Room testingRoom = (Room) inClient.readObject();
 
-            //TODO: Implement operations on Room object with map/reduce
+            //TODO: Connect to multiple workers
 
             // Connect to Worker and send data
             Socket workerSocket = new Socket("localhost", 9091);

@@ -26,12 +26,15 @@ public class Master {
 
     public static void main(String[] args){
 
-        // Initialize Rooms
-        Room room1 = new Room("Room1", 1, 1, "area1", 3.5, 5, "../static/room1img.jpg");
-        Room room2 = new Room("Room2", 2, 2, "area2", 4.5, 6, "../static/room2img.jpg");
-        Room room3 = new Room("Room3", 3, 3, "area3", 5.5, 7, "../static/room3img.jpg");
-        Room room4 = new Room("Room4", 4, 4, "area4", 6.5, 8, "../static/room4img.jpg");
-        Room room5 = new Room("Room5", 5, 5, "area5", 7.5, 9, "../static/room5img.jpg");
+        // Initialize Rooms FOR TESTING
+//        Room room1 = new Room("Room1", 1, 1, "area1", 3.5, 5, "../static/room1img.jpg");
+//        Room room2 = new Room("Room2", 2, 2, "area2", 4.5, 6, "../static/room2img.jpg");
+//        Room room3 = new Room("Room3", 3, 3, "area3", 5.5, 7, "../static/room3img.jpg");
+//        Room room4 = new Room("Room4", 4, 4, "area4", 6.5, 8, "../static/room4img.jpg");
+//        Room room5 = new Room("Room5", 5, 5, "area5", 7.5, 9, "../static/room5img.jpg");
+
+        // TODO: Parsing JSON contais rooms
+
 
         new Master().startServer();
     }

@@ -99,4 +99,18 @@ public class Room implements Serializable {
     public void reserveDates(Date startDate, Date endDate) {
         this.availableDates.remove(startDate, endDate);
     }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomName='" + roomName + '\'' +
+                ", roomId=" + roomId +
+                ", managerId=" + managerId +
+                ", area='" + area + '\'' +
+                ", rating=" + rating +
+                ", numberOfReviews=" + numberOfReviews +
+                ", roomImage='" + roomImage + '\'' +
+                ", availableDates=" + availableDates +
+                '}';
+    }
 }

@@ -10,6 +10,8 @@ public class Worker {
     ObjectInputStream in;
     ObjectOutputStream out;
 
+    private static int numberOfWorkers = 3;
+
     private int sleepTime;
     private static final Object lock = new Object();
 
@@ -52,8 +54,6 @@ public class Worker {
         try {
             // change values ONLY FOR TESTING
             Room testingRoom = (Room) in.readObject();
-            testingRoom.setTesting(true);
-            testingRoom.incrementRoomIncrement();
             Thread.sleep(sleepTime);
 
             // Connect to Reducer and send data
