@@ -72,6 +72,6 @@ public class Client extends Thread{
     public static void main(String args[]){
 
         //TESTING
-        //new Client(new Room("room1",1,1,"area1",1.5,5, "asdasdas")).start();
+        new Client(new Room("room1",1,1,"area1",1.5,5, "asdasdas")).start();
     }
 }
