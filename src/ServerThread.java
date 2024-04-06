@@ -34,7 +34,9 @@ public class ServerThread extends Thread{
             inClient = new ObjectInputStream(clientSocket.getInputStream());
             Room testingRoom = (Room) inClient.readObject();
 
-            //TODO: Connect to multiple workers
+            //TODO: Send to Mapper the requestId firm outClient
+            //TODO: Match the result of Mapper with the proper Worker
+            //TODO: Send the outClient to the chosen Worker
 
             // Connect to Worker and send data
             Socket workerSocket = new Socket("localhost", 9091);
@@ -50,14 +52,6 @@ public class ServerThread extends Thread{
             Room room = (Room) inReducer.readObject();
             outClient.writeObject(room);
             outClient.flush();
-
-//            // Get data from Worker
-//            in = new ObjectInputStream(workerSocket.getInputStream());
-//            Room room = (Room) in.readObject();
-//
-//            // Send data to Client
-//            outClient.writeObject(room);
-//            outClient.flush();
 
         } catch (IOException e) {
             throw new RuntimeException(e);

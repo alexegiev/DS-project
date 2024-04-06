@@ -10,14 +10,17 @@ public class Worker {
     ObjectInputStream in;
     ObjectOutputStream out;
 
-    private static int numberOfWorkers = 3;
-
     private int sleepTime;
     private static final Object lock = new Object();
 
     static private int masterCount = 1;
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws UnknownHostException {
+        InetAddress workerIp = InetAddress.getLocalHost();
+        System.out.println("Worker IP: " + workerIp.getHostAddress());
+
+        //TODO: Send the ip address to Master, so that he can know the Worker's IP for the future
+
         new Worker().startWorker();
     }
 

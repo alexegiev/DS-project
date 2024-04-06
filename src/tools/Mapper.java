@@ -1,6 +1,6 @@
 package tools;
 /*
-* Purpose of mapper is to:
+* Purpose of Mapper is to:
 *   Be called each time a client request is made
 *   Using a Hash function H(reqId) = reqId % numberOfWorkers
 *   Determine to which worker will the request be forward
