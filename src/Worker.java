@@ -6,7 +6,9 @@ import java.net.*;
 public class Worker {
 
     //fields
-    ServerSocket worker = null;
+    ServerSocket workerSocket = null;
+    InetAddress workerIp = null;
+    int workerPort;
     ObjectInputStream in;
     ObjectOutputStream out;
 
@@ -15,31 +17,58 @@ public class Worker {
 
     static private int masterCount = 1;
 
-    public static void main(String args[]) throws UnknownHostException {
-        InetAddress workerIp = InetAddress.getLocalHost();
-        System.out.println("Worker IP: " + workerIp.getHostAddress());
-
-        //TODO: Send the ip address to Master, so that he can know the Worker's IP for the future
-
+    public static void main(String args[]) {
         new Worker().startWorker();
     }
 
     public void startWorker() {
 
         try {
-            worker = new ServerSocket(9091);
-            System.out.println("Worker started at port: " + worker.getLocalPort());
+            //Get worker's IP
+            this.workerIp = InetAddress.getLocalHost();
+            this.workerIp = InetAddress.getByName(workerIp.getHostAddress());
+            System.out.println("Worker's IP: " + workerIp);
+
+            // Create a new ServerSocket object
+            this.workerSocket = new ServerSocket(9091);
+            this.workerPort = workerSocket.getLocalPort();
+            System.out.println("Worker started at port: " + workerPort);
+
+            // Send the IP and Port of Worker to Master
+            sendToMaster(workerIp, workerPort);
+
+            // Wait for Master
             waitForMaster();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    void waitForMaster() {
+    private void sendToMaster(InetAddress workerIp, int workerPort) {
+
+        try {
+            // Connect to Master
+            Socket masterSocket = new Socket("localhost", 9095);
+            out = new ObjectOutputStream(masterSocket.getOutputStream());
+            in = new ObjectInputStream(masterSocket.getInputStream());
+
+            // Send IP and Port to Master
+            out.writeObject(workerIp);
+            out.writeObject(workerPort);
+            out.flush();
+
+            System.out.println("Worker's IP and Port sent to Master");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void waitForMaster() {
         while (true) {
             try {
                 System.out.println("Waiting for Master request");
-                Socket masterSocket = worker.accept();
+                Socket masterSocket = workerSocket.accept();
                 System.out.println("Connected to Master: " + masterCount + " Timers");
                 masterCount++;
 
