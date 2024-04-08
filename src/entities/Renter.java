@@ -1,4 +1,28 @@
 package entities;
 
-public class Renter {
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+public class Renter extends Thread {
+
+    public void run() {
+        //Initialize socket and input/output streams
+        Socket requestSocket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+    }
+
+    public void  search(){
+        // TODO
+    }
+
+    public void  book(){
+        // TODO
+    }
+    public void  rate(){
+        // TODO
+    }
+
+
 }
