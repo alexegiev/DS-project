@@ -2,6 +2,9 @@ import entities.Room;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Worker {
 
@@ -18,24 +21,42 @@ public class Worker {
     static private int masterCount = 1;
 
     public static void main(String args[]) {
-        if (args.length < 1) {
-            System.out.println("Please provide a port number as a command-line argument.");
+
+        // boolean used to check where this worker is tested
+        // true: In lab
+        // false: In local
+        boolean isLab = false;
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Is Worker initiated in Lab? (1:Yes / 2:No )");
+        int choice = scanner.nextInt();
+        if (choice == 1) {
+            isLab = true;
+        } else if (choice == 2) {
+            isLab = false;
+        } else {
+            System.out.println("Invalid choice");
             return;
         }
+        if(!isLab){
+            System.out.print("Please provide a port number: ");
 
-        int port;
-        try {
-            port = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid port number. Please provide a valid port number as a command-line argument.");
-            return;
+            while (!scanner.hasNextInt()) {
+                System.out.println("That's not a number! Please enter a number: ");
+                scanner.next(); // discard the non-integer input
+            }
+
+            int port = scanner.nextInt();
+
+
+            new Worker().startWorkerInLocal(port);
         }
 
-        new Worker().startWorker(port);
 
     }
 
-    public void startWorker(int port ) {
+    public void startWorkerInLocal(int port ) {
 
         try {
             //Get worker's IP
@@ -61,7 +82,7 @@ public class Worker {
     private void sendToMaster(InetAddress workerIp, int workerPort) {
 
         try {
-            // Connect to Master
+            // Connect to Master CHANGE "localhost" to Master's IP address
             Socket masterSocket = new Socket("localhost", 9095);
             out = new ObjectOutputStream(masterSocket.getOutputStream());
             in = new ObjectInputStream(masterSocket.getInputStream());
@@ -121,7 +142,13 @@ public class Worker {
 //                System.out.println("Error: " + e);
 //            }
 //        }
+    }
 
-
+    private void storeInMemory(Room room) {
+        // Create an ArrayList to store Room objects
+        List<Room> roomList = new ArrayList<>();
+        // Store the room object in the list
+        roomList.add(room);
+        System.out.println("Room information stored in memory: " + room);
     }
 }
