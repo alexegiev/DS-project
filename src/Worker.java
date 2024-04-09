@@ -39,6 +39,7 @@ public class Worker {
             System.out.println("Invalid choice");
             return;
         }
+
         if(!isLab){
             System.out.print("Please provide a port number: ");
 
@@ -52,8 +53,33 @@ public class Worker {
 
             new Worker().startWorkerInLocal(port);
         }
+        else {
+            new Worker().startWorkerInLab();
+        }
 
 
+    }
+
+    private void startWorkerInLab() {
+        try {
+            //Get worker's IP
+            this.workerIp = InetAddress.getLocalHost();
+            this.workerIp = InetAddress.getByName(workerIp.getHostAddress());
+            System.out.println("Worker's IP: " + workerIp);
+
+            // Create a new ServerSocket object
+            this.workerSocket = new ServerSocket(9091);
+            this.workerPort = workerSocket.getLocalPort();
+            System.out.println("Worker started at port: " + workerPort);
+
+            // Send the IP and Port of Worker to Master
+            sendToMaster(workerIp, workerPort);
+
+            // Wait for Master
+            waitForMaster();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void startWorkerInLocal(int port ) {
