@@ -1,3 +1,5 @@
+import entities.WorkerInfo;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -105,17 +107,5 @@ public class Master {
                 return;
             }
         }
-    }
-}
-
-class WorkerInfo {
-    InetAddress ip;
-    int port;
-    Socket socket;
-
-    WorkerInfo(InetAddress ip, int port, Socket socket) {
-        this.ip = ip;
-        this.port = port;
-        this.socket = socket;
     }
 }
