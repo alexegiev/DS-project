@@ -1,16 +1,17 @@
 import java.io.*;
 import java.net.*;
 
+import entities.Request;
 import entities.Room;
 
 public class Client extends Thread{
 
     //private fields
 
-    Room roomTest;
+    Request request;
 
-    Client(Room room) {
-        this.roomTest = room;
+    Client(Request request) {
+        this.request = request;
     }
 
 
@@ -30,15 +31,22 @@ public class Client extends Thread{
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             in = new ObjectInputStream(requestSocket.getInputStream());
 
-            // write object Room
-            out.writeObject(roomTest);
+            //write object Request
+            out.writeObject(request);
             out.flush();
 
-            // Wait and receive data from Master
-            Room room = (Room) in.readObject();
+//            // write object Room
+//            out.writeObject(request);
+//            out.flush();
 
-            // print the received results (from Room.toString())
-            System.out.println("Room: " + room.toString());
+            // Wait and receive data from Master
+            Request request1 = (Request) in.readObject();
+
+//            // print the received results (from Room.toString())
+//            System.out.println("Room: " + room.toString());
+
+            //print the received results (from Request.toString())
+            System.out.println("Request: " + request1.toString());
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
@@ -72,6 +80,6 @@ public class Client extends Thread{
     public static void main(String args[]){
 
         //TESTING
-        new Client(new Room("room1",1,1,"area1",1.5,5, "asdasdas")).start();
+        new Client(new Request(0,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
     }
 }

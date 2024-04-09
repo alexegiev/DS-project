@@ -1,16 +1,21 @@
 package entities;
 
 import java.net.InetAddress;
-import java.net.Socket;
 
 public class WorkerInfo {
-    InetAddress ip;
-    int port;
-    Socket socket;
+    private InetAddress ip;
+    private int port;
 
-    public WorkerInfo(InetAddress ip, int port, Socket socket) {
+    public WorkerInfo(InetAddress ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.socket = socket;
+    }
+
+    public InetAddress getIp() {
+        return ip;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

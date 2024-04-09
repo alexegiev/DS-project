@@ -17,6 +17,9 @@ public class Mapper {
 
     // Methods
     public int mapRequest(int requestId) {
+        if (numberOfWorkers == 0) {
+            throw new RuntimeException("No workers available");
+        }
         return requestId % numberOfWorkers;
     }
 
@@ -27,5 +30,9 @@ public class Mapper {
 
     public void setNumberOfWorkers(int numberOfWorkers) {
         this.numberOfWorkers = numberOfWorkers;
+    }
+
+    public void increaseWorkers() {
+        this.numberOfWorkers++;
     }
 }

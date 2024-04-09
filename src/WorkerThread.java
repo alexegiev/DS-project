@@ -1,3 +1,4 @@
+import entities.Request;
 import entities.Room;
 
 import java.io.ObjectInputStream;
@@ -22,18 +23,16 @@ public class WorkerThread extends Thread{
             out = new ObjectOutputStream(masterSocket.getOutputStream());
             in = new ObjectInputStream(masterSocket.getInputStream());
 
-            Room testingRoom = (Room) in.readObject();
+            Request request = (Request) in.readObject();
 
-            //TODO: Implement operations on Room object with map/reduce
-
-            out.writeObject(testingRoom);
+            out.writeObject(request);
             out.flush();
 
             // Connect to Reducer and send data
             Socket reducerSocket = new Socket("localhost", 9092);
             ObjectOutputStream reducerOut = new ObjectOutputStream(reducerSocket.getOutputStream());
             ObjectInputStream reducerIn = new ObjectInputStream(reducerSocket.getInputStream());
-            reducerOut.writeObject(testingRoom);
+            reducerOut.writeObject(request);
             reducerOut.flush();
 
         } catch (Exception e) {

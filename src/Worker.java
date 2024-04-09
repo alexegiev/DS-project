@@ -87,7 +87,6 @@ public class Worker {
         try {
             //Get worker's IP
             this.workerIp = InetAddress.getLocalHost();
-            this.workerIp = InetAddress.getByName(workerIp.getHostAddress());
             System.out.println("Worker's IP: " + workerIp);
 
             // Create a new ServerSocket object
@@ -122,7 +121,15 @@ public class Worker {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                out.close();
+                in.close();
+            } catch (IOException e) {
+                System.out.println("Error: " + e);
+            }
         }
+
     }
 
     private void waitForMaster() {

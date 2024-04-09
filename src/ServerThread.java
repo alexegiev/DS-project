@@ -1,4 +1,7 @@
+import entities.Request;
 import entities.Room;
+import entities.WorkerInfo;
+import tools.Mapper;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,16 +35,30 @@ public class ServerThread extends Thread{
         try {
             outClient = new ObjectOutputStream(clientSocket.getOutputStream());
             inClient = new ObjectInputStream(clientSocket.getInputStream());
-            Room testingRoom = (Room) inClient.readObject();
+            //Room testingRoom = (Room) inClient.readObject(); TESTING
 
-            //TODO: Send to Mapper the requestId firm outClient
-            //TODO: Match the result of Mapper with the proper Worker
-            //TODO: Send the outClient to the chosen Worker
+            // Break down the request to Room and RequestId
+            Request request = (Request) inClient.readObject();
+            Room testingRoom = request.getRoom();
+            int requestId = request.getRequestId();
+
+            // Get Mapper from Master
+            Mapper mapper = Master.getMapper();
+
+            // Get from mapper the worker that will process the request
+            int workerId = mapper.mapRequest(requestId);
+
+            // Get appropriate worker from List
+            WorkerInfo workerInfo = Master.getWorkerSockets().get(workerId);
+
+            // Print worker IP and socket
+            System.out.println("Selected Worker:  IP: " + workerInfo.getIp() + " Port: " + workerInfo.getPort());
 
             // Connect to Worker and send data
-            Socket workerSocket = new Socket("localhost", 9091);
-            out = new ObjectOutputStream(workerSocket.getOutputStream());
-            out.writeObject(testingRoom);
+            Socket connectedWorker = new Socket(workerInfo.getIp(), workerInfo.getPort());
+            out = new ObjectOutputStream(connectedWorker.getOutputStream());
+            in = new ObjectInputStream(connectedWorker.getInputStream());
+            out.writeObject(request);
             out.flush();
 
             // Connect to Reducer and receive data
@@ -49,8 +66,8 @@ public class ServerThread extends Thread{
             outReducer = new ObjectOutputStream(reducerSocket.getOutputStream());
             inReducer = new ObjectInputStream(reducerSocket.getInputStream());
 
-            Room room = (Room) inReducer.readObject();
-            outClient.writeObject(room);
+            Request request1 = (Request) inReducer.readObject();
+            outClient.writeObject(request1);
             outClient.flush();
 
         } catch (IOException e) {

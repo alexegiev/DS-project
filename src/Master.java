@@ -1,4 +1,5 @@
 import entities.WorkerInfo;
+import tools.Mapper;
 
 import java.io.*;
 import java.net.*;
@@ -33,13 +34,22 @@ public class Master {
     private static int workerCount = 1;
 
     // List that contains all connected Workers
-    ArrayList<WorkerInfo> workers = new ArrayList<WorkerInfo>();
-    ArrayList<Socket> workerSockets = new ArrayList<>();
+    static ArrayList<WorkerInfo> workerSockets = new ArrayList<>();
 
-    public static void main(String[] args){
+    // Mapper object
+    static Mapper mapper = null;
 
-        // TODO: Parsing JSON contains rooms
-        new Master().startServer();
+    public Master() {
+        mapper= new Mapper(0);
+        startServer();
+    }
+
+    public static Mapper getMapper() {
+        return mapper;
+    }
+
+    public static ArrayList<WorkerInfo> getWorkerSockets() {
+        return workerSockets;
     }
 
     void startServer() {
@@ -66,24 +76,31 @@ public class Master {
             try {
                 // Functionality for Workers requests
                 Socket newWorkerSocket = worker.accept();
-                workerSockets.add(newWorkerSocket);
+                InetAddress workerIp = newWorkerSocket.getInetAddress();
+                int workerPort = newWorkerSocket.getPort();
+
+                // Store the worker's IP and port
+                WorkerInfo workerInfo = new WorkerInfo(workerIp, workerPort);
+                workerSockets.add(workerInfo);
+
+                System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
+
                 System.out.println("Worker No. " + workerSockets.size() + " connected ");
+                mapper.increaseWorkers();
 
-                // Get the IP and Port of the Worker
-                ObjectOutputStream out = new ObjectOutputStream(newWorkerSocket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(newWorkerSocket.getInputStream());
-                InetAddress workerIp = (InetAddress) in.readObject();
-                int workerPort = (int) in.readObject();
-
-                // Store the Worker's information
-                workers.add(new WorkerInfo(workerIp, workerPort, newWorkerSocket));
-
-                System.out.println("Worker's IP: " + workerIp + " Worker's Port: " + workerPort);
             }
             catch(Exception e){
                 System.out.println("Error: " + e);
                 e.printStackTrace();
                 return;
+            } finally {
+                try {
+                    if (workerSocket != null) {
+                        workerSocket.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -107,5 +124,11 @@ public class Master {
                 return;
             }
         }
+    }
+
+    public static void main(String[] args){
+
+        // TODO: Parsing JSON contains rooms
+        Master master = new Master();
     }
 }
