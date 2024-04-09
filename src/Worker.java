@@ -18,10 +18,24 @@ public class Worker {
     static private int masterCount = 1;
 
     public static void main(String args[]) {
-        new Worker().startWorker();
+        if (args.length < 1) {
+            System.out.println("Please provide a port number as a command-line argument.");
+            return;
+        }
+
+        int port;
+        try {
+            port = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid port number. Please provide a valid port number as a command-line argument.");
+            return;
+        }
+
+        new Worker().startWorker(port);
+
     }
 
-    public void startWorker() {
+    public void startWorker(int port ) {
 
         try {
             //Get worker's IP
@@ -30,7 +44,7 @@ public class Worker {
             System.out.println("Worker's IP: " + workerIp);
 
             // Create a new ServerSocket object
-            this.workerSocket = new ServerSocket(9091);
+            this.workerSocket = new ServerSocket(port);
             this.workerPort = workerSocket.getLocalPort();
             System.out.println("Worker started at port: " + workerPort);
 
