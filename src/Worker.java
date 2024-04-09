@@ -2,8 +2,6 @@ import entities.Room;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Worker {
 
@@ -19,9 +17,25 @@ public class Worker {
 
     static private int masterCount = 1;
 
-    public static void main(String args[]) {new Worker().startWorker();}
+    public static void main(String args[]) {
+        if (args.length < 1) {
+            System.out.println("Please provide a port number as a command-line argument.");
+            return;
+        }
 
-    public void startWorker() {
+        int port;
+        try {
+            port = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid port number. Please provide a valid port number as a command-line argument.");
+            return;
+        }
+
+        new Worker().startWorker(port);
+
+    }
+
+    public void startWorker(int port ) {
 
         try {
             //Get worker's IP
@@ -30,7 +44,7 @@ public class Worker {
             System.out.println("Worker's IP: " + workerIp);
 
             // Create a new ServerSocket object
-            this.workerSocket = new ServerSocket(9091);
+            this.workerSocket = new ServerSocket(port);
             this.workerPort = workerSocket.getLocalPort();
             System.out.println("Worker started at port: " + workerPort);
 
@@ -99,7 +113,6 @@ public class Worker {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
 //        finally {
 //            try {
 //                in.close();
@@ -111,12 +124,4 @@ public class Worker {
 
 
     }
-    private void storeInMemory(Room room) {
-        // Create an ArrayList to store Room objects
-        List<Room> roomList = new ArrayList<>();
-        // Store the room object in the list
-        roomList.add(room);
-        System.out.println("Room information stored in memory: " + room);
-    }
-
 }

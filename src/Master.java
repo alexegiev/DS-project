@@ -1,9 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Map;
 
-import entities.Room;
 /*
 *
 * This is the Master class of the Distributed System
@@ -30,24 +28,27 @@ public class Master {
     ObjectInputStream clientIn = null;
 
     private static int clientCount = 1;
+    private static int workerCount = 1;
 
     // List that contains all connected Workers
-    ArrayList<Socket> workers = new ArrayList<>();
+    ArrayList<WorkerInfo> workers = new ArrayList<WorkerInfo>();
+    ArrayList<Socket> workerSockets = new ArrayList<>();
 
     public static void main(String[] args){
 
-        // TODO: Parsing JSON contais rooms
+        // TODO: Parsing JSON contains rooms
         new Master().startServer();
     }
 
     void startServer() {
-
-        // Create a new ServerSocket object and wait for clients
         try {
             server = new ServerSocket(9090);
             worker = new ServerSocket(9095);
             System.out.println("Server started at port: " + server.getLocalPort());
-            waitForClient();
+
+            // Start separate threads for accepting workers and clients
+            new Thread(this::waitForWorker).start();
+            new Thread(this::waitForClient).start();
         }
         catch (SocketException e) {
             e.printStackTrace();
@@ -58,22 +59,36 @@ public class Master {
         }
     }
 
-    void waitForClient() {
+    void waitForWorker() {
         while (true) {
             try {
                 // Functionality for Workers requests
-                workerSocket = worker.accept();
-                System.out.println("Worker No. " + clientCount + " connected ");
+                Socket newWorkerSocket = worker.accept();
+                workerSockets.add(newWorkerSocket);
+                System.out.println("Worker No. " + workerSockets.size() + " connected ");
 
                 // Get the IP and Port of the Worker
-                ObjectOutputStream out = new ObjectOutputStream(workerSocket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(workerSocket.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(newWorkerSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(newWorkerSocket.getInputStream());
                 InetAddress workerIp = (InetAddress) in.readObject();
                 int workerPort = (int) in.readObject();
-                
+
+                // Store the Worker's information
+                workers.add(new WorkerInfo(workerIp, workerPort, newWorkerSocket));
+
                 System.out.println("Worker's IP: " + workerIp + " Worker's Port: " + workerPort);
+            }
+            catch(Exception e){
+                System.out.println("Error: " + e);
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
 
-
+    void waitForClient() {
+        while (true) {
+            try {
                 // Functionality for Client requests
                 System.out.println("Waiting for client request");
                 clientSocket = server.accept();
@@ -83,14 +98,24 @@ public class Master {
                 // create a new ServerThread object
                 ServerThread serverThread = new ServerThread(clientSocket);
                 serverThread.start();
-
             }
             catch(Exception e){
                 System.out.println("Error: " + e);
                 e.printStackTrace();
                 return;
             }
-
         }
+    }
+}
+
+class WorkerInfo {
+    InetAddress ip;
+    int port;
+    Socket socket;
+
+    WorkerInfo(InetAddress ip, int port, Socket socket) {
+        this.ip = ip;
+        this.port = port;
+        this.socket = socket;
     }
 }
