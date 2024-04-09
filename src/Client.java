@@ -80,6 +80,6 @@ public class Client extends Thread{
     public static void main(String args[]){
 
         //TESTING
-        new Client(new Request(0,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
+        new Client(new Request(1,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
     }
 }
