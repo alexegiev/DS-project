@@ -2,6 +2,8 @@ import entities.Room;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Worker {
 
@@ -17,9 +19,7 @@ public class Worker {
 
     static private int masterCount = 1;
 
-    public static void main(String args[]) {
-        new Worker().startWorker();
-    }
+    public static void main(String args[]) {new Worker().startWorker();}
 
     public void startWorker() {
 
@@ -99,6 +99,7 @@ public class Worker {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
 //        finally {
 //            try {
 //                in.close();
@@ -110,4 +111,12 @@ public class Worker {
 
 
     }
+    private void storeInMemory(Room room) {
+        // Create an ArrayList to store Room objects
+        List<Room> roomList = new ArrayList<>();
+        // Store the room object in the list
+        roomList.add(room);
+        System.out.println("Room information stored in memory: " + room);
+    }
+
 }

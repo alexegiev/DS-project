@@ -17,10 +17,10 @@ public class Renter extends Thread {
         // TODO
     }
 
-    public void  book(){
+    public void  reserveRoom(){
         // TODO
     }
-    public void  rate(){
+    public void  rateRoom(){
         // TODO
     }
 
