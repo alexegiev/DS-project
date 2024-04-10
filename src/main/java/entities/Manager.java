@@ -10,8 +10,8 @@ public class Manager extends Thread {
     private static final String MASTER_HOST = "localhost";
     private static final int MASTER_PORT = 9090;
 
-    public Manager(Room room) {
-        this.room = room;
+    public Manager() {
+
     }
 
     @Override

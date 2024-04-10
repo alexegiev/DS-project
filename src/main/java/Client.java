@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 import entities.Request;
 import entities.Room;
@@ -79,7 +80,26 @@ public class Client extends Thread{
 
     public static void main(String args[]){
 
+        // ask Client if is Manager or Renter
+        System.out.println("Are you a Manager or a Renter? (1: Manager, 2: Renter)");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+
+        // validate input
+        while (choice != 1 && choice != 2) {
+            System.out.println("Invalid choice. Please enter 1 or 2.");
+            choice = scanner.nextInt();
+        }
+
+        // Create a new Client object
+        if (choice == 1) {
+            System.out.println("Enter Manager Username: ");
+        } else {
+            System.out.println("Enter .");
+        }
+
+
         //TESTING
-        new Client(new Request(1,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
+        //new Client(new Request(1,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
     }
 }
