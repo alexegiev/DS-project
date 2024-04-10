@@ -1,5 +1,8 @@
 import java.io.*;
+import java.lang.ref.Cleaner;
 import java.net.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import entities.Request;
@@ -11,10 +14,60 @@ public class Client extends Thread{
 
     Request request;
 
+    // List of Managers and Renters of the systems
+    static List<String> managers = Arrays.asList("Manager1", "Manager2", "Manager3");
+    static List<String> renters = Arrays.asList("Renter1", "Renter2", "Renter3");
+
+    // Constructors
+
+    public Client() {
+    }
+
     Client(Request request) {
         this.request = request;
     }
 
+    private String login(){
+        // ask Client if is Manager or Renter
+        System.out.println("Are you a Manager or a Renter? (1: Manager, 2: Renter)");
+
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+
+        // validate input
+        while (choice != 1 && choice != 2) {
+            System.out.println("Invalid choice. Please enter 1 or 2");
+            choice = scanner.nextInt();
+        }
+
+        String username;
+
+        // Create a new Client object
+        if (choice == 1) {
+            System.out.println("Enter Manager Username: ");
+            username = scanner.next();
+            while(true) {
+                if (managers.contains(username)) {
+                    System.out.println("Welcome " + username + " !");
+                    break;
+                }
+                System.out.println("Invalid username. Please enter a valid username.");
+                username = scanner.next();
+            }
+        } else {
+            System.out.println("Enter Renter Username: ");
+            username = scanner.next();
+            while(true) {
+                if (renters.contains(username)) {
+                    System.out.println("Welcome " + username + " !");
+                    break;
+                }
+                System.out.println("Invalid username. Please enter a valid username.");
+                username = scanner.next();
+            }
+        }
+        return username;
+    }
 
     public void run() {
 
@@ -80,23 +133,12 @@ public class Client extends Thread{
 
     public static void main(String args[]){
 
-        // ask Client if is Manager or Renter
-        System.out.println("Are you a Manager or a Renter? (1: Manager, 2: Renter)");
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
+        //Login
+        Client client = new Client();
+        String username = client.login();
 
-        // validate input
-        while (choice != 1 && choice != 2) {
-            System.out.println("Invalid choice. Please enter 1 or 2.");
-            choice = scanner.nextInt();
-        }
-
-        // Create a new Client object
-        if (choice == 1) {
-            System.out.println("Enter Manager Username: ");
-        } else {
-            System.out.println("Enter .");
-        }
+        //TODO: Show menu for Manager or Renter
+        //TODO: Form the appropriate Request object
 
 
         //TESTING
