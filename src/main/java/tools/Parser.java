@@ -14,7 +14,7 @@ import java.util.List;
 public class Parser {
 
     public JsonArray readJsonFile(String filePath) {
-        try (JsonReader reader = Json.createReader(Files.newBufferedReader(Paths.get(filePath)))) {
+        try (JsonReader reader = Json.createReader(Files.newBufferedReader(Paths.get(filePath).toAbsolutePath()))) {
             return reader.readArray();
         } catch (IOException e) {
             e.printStackTrace();
