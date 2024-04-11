@@ -136,7 +136,6 @@ public class Master {
 
     public static void main(String[] args){
 
-        // TODO: Parsing JSON contains rooms
         Master master = new Master();
     }
 }
