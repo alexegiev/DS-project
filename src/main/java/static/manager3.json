@@ -25,5 +25,14 @@
     "rating": 3.9,
     "numberOfReviews": 15,
     "roomImage": "image9.jpg"
+  },
+  {
+    "roomName": "room10",
+    "roomId": 10,
+    "managerId": 3,
+    "area": "area10",
+    "rating": 1.9,
+    "numberOfReviews": 12,
+    "roomImage": "image10.jpg"
   }
 ]
