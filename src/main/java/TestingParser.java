@@ -12,7 +12,7 @@ public class TestingParser {
 
     public static void main(String[] args) {
         Parser parser = new Parser();
-        String filePath = "src/main/java/static/test.json";
+        String filePath = "src/main/java/static/manager1.json";
         JsonArray jsonArray = parser.readJsonFile(filePath);
         List<Room> rooms = parser.parseJsonArray(jsonArray);
 
