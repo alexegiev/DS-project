@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import entities.Manager;
 import entities.Request;
 import entities.Room;
 
@@ -80,6 +81,7 @@ public class Client extends Thread{
 
     private static void managerActions(String username) {
 
+        Manager manager = new Manager();
         // show available actions for manager
         System.out.println("Choose available actions: " +
                 "\n1. Add Room" +
@@ -94,7 +96,7 @@ public class Client extends Thread{
             switch (choice) {
                 case 1:
                     // Add Room
-
+                    manager.addRoomsFromJson(username);
                     break;
                 case 2:
                     // Add Room Availability Date
