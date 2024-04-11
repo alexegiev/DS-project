@@ -95,8 +95,10 @@ public class Client extends Thread{
         while (choice != 4) {
             switch (choice) {
                 case 1:
-                    // Add Room
-                    manager.addRoomsFromJson(username);
+                    // Get Manager's Rooms from JSON
+                    List<Room> rooms = manager.addRoomsFromJson(username);
+
+                    // TODO: Prepare a request object to send to Master
                     break;
                 case 2:
                     // Add Room Availability Date
@@ -170,13 +172,13 @@ public class Client extends Thread{
 //            out.flush();
 
             // Wait and receive data from Master
-            Request request1 = (Request) in.readObject();
+            Request response = (Request) in.readObject();
 
 //            // print the received results (from Room.toString())
 //            System.out.println("Room: " + room.toString());
 
             //print the received results (from Request.toString())
-            System.out.println("Request: " + request1.toString());
+            System.out.println("Response: " + response.toString());
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
