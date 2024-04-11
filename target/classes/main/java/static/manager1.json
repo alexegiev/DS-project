@@ -11,7 +11,7 @@
   {
     "roomName": "room2",
     "roomId": 2,
-    "managerId": 2,
+    "managerId": 1,
     "area": "area2",
     "rating": 2.5,
     "numberOfReviews": 10,
@@ -20,7 +20,7 @@
   {
     "roomName": "room3",
     "roomId": 3,
-    "managerId": 3,
+    "managerId": 1,
     "area": "area3",
     "rating": 3.5,
     "numberOfReviews": 15,
