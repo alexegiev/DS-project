@@ -10,6 +10,7 @@ public class Worker {
 
     //fields
     ServerSocket workerSocket = null;
+    String workerLabIp = null;
     InetAddress workerIp = null;
     int workerPort;
     ObjectInputStream in;
@@ -54,25 +55,26 @@ public class Worker {
             new Worker().startWorkerInLocal(port);
         }
         else {
-            new Worker().startWorkerInLab();
+            System.out.print("Please the IP address: ");
+            String workerIp = scanner.next();
+            new Worker().startWorkerInLab(workerIp);
         }
 
 
     }
 
-    private void startWorkerInLab() {
+    private void startWorkerInLab(String workerLabIp) {
         try {
             //Get worker's IP
-            this.workerIp = InetAddress.getLocalHost();
-            this.workerIp = InetAddress.getByName(workerIp.getHostAddress());
+            this.workerLabIp = workerLabIp;
 
             // Create a new ServerSocket object
             this.workerSocket = new ServerSocket(9091);
             this.workerPort = workerSocket.getLocalPort();
-            System.out.println("Worker started at: " + workerIp + ":" + workerPort);
+            System.out.println("Worker started at: " + workerLabIp + ":" + workerPort);
 
             // Send the IP and Port of Worker to Master
-            sendToMaster(workerIp, workerPort);
+            sendToLabMaster(workerLabIp, workerPort);
 
             // Wait for Master
             waitForMaster();
@@ -81,6 +83,7 @@ public class Worker {
         }
     }
 
+    // used for testing
     public void startWorkerInLocal(int port) {
 
         try {
@@ -100,6 +103,43 @@ public class Worker {
             waitForMaster();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void sendToLabMaster(String workerIp, int workerPort) {
+
+        Socket masterSocket = null;
+        try {
+            // Connect to Master CHANGE "localhost" to Master's IP address
+            masterSocket = new Socket("localhost", 9095);
+            out = new ObjectOutputStream(masterSocket.getOutputStream());
+            in = new ObjectInputStream(masterSocket.getInputStream());
+
+            // Send IP and Port to Master
+            out.writeObject(workerIp);
+            out.flush();
+            out.writeObject(workerPort);
+            out.flush();
+
+            System.out.println("Worker's IP and Port sent to Master");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+                if (masterSocket != null) {
+                    masterSocket.close();
+                    System.out.println("Connection to Master closed");
+                }
+            } catch (IOException e) {
+                System.out.println("Error: " + e);
+            }
         }
     }
 

@@ -1,15 +1,17 @@
 package entities;
 
-public class WorkerInfo {
-    private String ip;
+import java.net.InetAddress;
+
+public class WorkerInfoLocal {
+    private InetAddress ip;
     private int port;
 
-    public WorkerInfo(String ip, int port) {
+    public WorkerInfoLocal(InetAddress ip, int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    public String getIp() {
+    public InetAddress getIp() {
         return ip;
     }
 

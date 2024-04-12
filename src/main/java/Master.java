@@ -1,9 +1,11 @@
 import entities.WorkerInfo;
+import entities.WorkerInfoLocal;
 import tools.Mapper;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /*
 *
@@ -35,13 +37,26 @@ public class Master {
 
     // List that contains all connected Workers
     static ArrayList<WorkerInfo> workers = new ArrayList<>();
+    static ArrayList<WorkerInfoLocal> workersLocal = new ArrayList<>();
 
     // Mapper object
     static Mapper mapper = null;
 
     public Master() {
         mapper= new Mapper(0);
-        startServer();
+        // Ask user is Master will start in Lab or Local
+        System.out.println("Is Master initiated in Lab? (1:Yes / 2:No )");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        if (choice == 1) {
+            System.out.println("Master initiated in Lab");
+        } else if (choice == 2) {
+            System.out.println("Master initiated in Local");
+        } else {
+            System.out.println("Invalid choice");
+            return;
+        }
+        startServer(choice);
     }
 
     public static Mapper getMapper() {
@@ -52,14 +67,19 @@ public class Master {
         return workers;
     }
 
-    void startServer() {
+    void startServer(int choice) {
         try {
             server = new ServerSocket(9090);
             worker = new ServerSocket(9095);
             System.out.println("Server started at port: " + server.getLocalPort());
 
             // Start separate threads for accepting workers and clients
-            new Thread(this::waitForWorker).start();
+            if (choice == 1) {
+                new Thread(this::waitForLabWorker).start();
+            } else {
+                new Thread(this::waitForLocalWorker).start();
+                return;
+            }
             new Thread(this::waitForClient).start();
         }
         catch (SocketException e) {
@@ -71,7 +91,48 @@ public class Master {
         }
     }
 
-    void waitForWorker() {
+    void waitForLabWorker() {
+        while (true) {
+            try {
+                // Functionality for Workers requests
+                Socket newWorkerSocket = worker.accept();
+
+                // Create a new ObjectInputStream object
+                ObjectOutputStream out = new ObjectOutputStream(newWorkerSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(newWorkerSocket.getInputStream());
+
+                // Store the IP of Worker
+                String workerIp = (String) in.readObject();
+
+                // Store the Port of Worker
+                int workerPort = (int) in.readObject();
+
+                // Create WorkerInfo object and save to workers List
+                WorkerInfo workerInfo = new WorkerInfo(workerIp, workerPort);
+                workers.add(workerInfo);
+
+                System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
+
+                System.out.println("Worker No. " + workers.size() + " connected ");
+                mapper.increaseWorkers();
+
+            }
+            catch(Exception e){
+                System.out.println("Error: " + e);
+                e.printStackTrace();
+                return;
+            } finally {
+                try {
+                    if (workerSocket != null) {
+                        workerSocket.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    void waitForLocalWorker() {
         while (true) {
             try {
                 // Functionality for Workers requests
@@ -88,12 +149,12 @@ public class Master {
                 int workerPort = (int) in.readObject();
 
                 // Create WorkerInfo object and save to workers List
-                WorkerInfo workerInfo = new WorkerInfo(workerIp, workerPort);
-                workers.add(workerInfo);
+                WorkerInfoLocal workerInfoLocal = new WorkerInfoLocal(workerIp, workerPort);
+                workersLocal.add(workerInfoLocal);
 
                 System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
 
-                System.out.println("Worker No. " + workers.size() + " connected ");
+                System.out.println("Worker No. " + workersLocal.size() + " connected ");
                 mapper.increaseWorkers();
 
             }
