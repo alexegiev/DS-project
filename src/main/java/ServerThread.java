@@ -48,7 +48,7 @@ public class ServerThread extends Thread{
             // Get from mapper the worker that will process the request
             int workerId = mapper.mapRequest(requestId);
 
-            // Get appropriate worker from List
+            // Get WorkerInfo from List
             WorkerInfo workerInfo = Master.getWorkerSockets().get(workerId);
 
             // Print worker IP and socket

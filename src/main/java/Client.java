@@ -84,8 +84,11 @@ public class Client{
                     // Get Manager's Rooms from JSON
                     List<Room> rooms = manager.addRoomsFromJson(username);
 
-                    // TODO: Prepare a request object (or request Objects)
-                    // TODO: create a ClientThread object which will handle the request
+                    // For each room, create a ClientThread object which will handle the request
+                    for (Room room : rooms) {
+                        new ClientThread(new Request(1, "Add Room", room)).start();
+                    }
+
                     break;
                 case 2:
                     // Add Room Availability Date

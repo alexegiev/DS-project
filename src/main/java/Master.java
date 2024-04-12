@@ -1,5 +1,4 @@
 import entities.WorkerInfo;
-import entities.WorkerInfoLocal;
 import tools.Mapper;
 
 import java.io.*;
@@ -37,10 +36,12 @@ public class Master {
 
     // List that contains all connected Workers
     static ArrayList<WorkerInfo> workers = new ArrayList<>();
-    static ArrayList<WorkerInfoLocal> workersLocal = new ArrayList<>();
 
     // Mapper object
     static Mapper mapper = null;
+
+    // boolean
+    public static boolean isLab = false;
 
     public Master() {
         mapper= new Mapper(0);
@@ -50,8 +51,10 @@ public class Master {
         int choice = scanner.nextInt();
         if (choice == 1) {
             System.out.println("Master initiated in Lab");
+            isLab = true;
         } else if (choice == 2) {
             System.out.println("Master initiated in Local");
+            isLab = false;
         } else {
             System.out.println("Invalid choice");
             return;
@@ -74,12 +77,7 @@ public class Master {
             System.out.println("Server started at port: " + server.getLocalPort());
 
             // Start separate threads for accepting workers and clients
-            if (choice == 1) {
-                new Thread(this::waitForLabWorker).start();
-            } else {
-                new Thread(this::waitForLocalWorker).start();
-                return;
-            }
+            new Thread(this::waitForWorker).start();
             new Thread(this::waitForClient).start();
         }
         catch (SocketException e) {
@@ -91,7 +89,7 @@ public class Master {
         }
     }
 
-    void waitForLabWorker() {
+    void waitForWorker() {
         while (true) {
             try {
                 // Functionality for Workers requests
@@ -102,7 +100,15 @@ public class Master {
                 ObjectInputStream in = new ObjectInputStream(newWorkerSocket.getInputStream());
 
                 // Store the IP of Worker
-                String workerIp = (String) in.readObject();
+                Object workerIpObject = in.readObject();
+                String workerIp;
+                if (workerIpObject instanceof InetAddress) {
+                    workerIp = ((InetAddress) workerIpObject).getHostAddress();
+                } else if (workerIpObject instanceof String) {
+                    workerIp = (String) workerIpObject;
+                } else {
+                    throw new IllegalStateException("workerIpObject is neither InetAddress nor String");
+                }
 
                 // Store the Port of Worker
                 int workerPort = (int) in.readObject();
@@ -114,47 +120,6 @@ public class Master {
                 System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
 
                 System.out.println("Worker No. " + workers.size() + " connected ");
-                mapper.increaseWorkers();
-
-            }
-            catch(Exception e){
-                System.out.println("Error: " + e);
-                e.printStackTrace();
-                return;
-            } finally {
-                try {
-                    if (workerSocket != null) {
-                        workerSocket.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    void waitForLocalWorker() {
-        while (true) {
-            try {
-                // Functionality for Workers requests
-                Socket newWorkerSocket = worker.accept();
-
-                // Create a new ObjectInputStream object
-                ObjectOutputStream out = new ObjectOutputStream(newWorkerSocket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(newWorkerSocket.getInputStream());
-
-                // Store the IP of Worker
-                InetAddress workerIp = (InetAddress) in.readObject();
-
-                // Store the Port of Worker
-                int workerPort = (int) in.readObject();
-
-                // Create WorkerInfo object and save to workers List
-                WorkerInfoLocal workerInfoLocal = new WorkerInfoLocal(workerIp, workerPort);
-                workersLocal.add(workerInfoLocal);
-
-                System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
-
-                System.out.println("Worker No. " + workersLocal.size() + " connected ");
                 mapper.increaseWorkers();
 
             }
