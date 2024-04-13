@@ -1,4 +1,5 @@
 import entities.Request;
+import entities.Response;
 import entities.Room;
 import entities.WorkerInfo;
 import tools.Mapper;
@@ -46,7 +47,7 @@ public class ServerThread extends Thread{
             Mapper mapper = Master.getMapper();
 
             // Get from mapper the worker that will process the request
-            int workerId = mapper.mapRequest(requestId);
+            int workerId = mapper.mapRequest(testingRoom.getRoomId());
 
             // Get WorkerInfo from List
             WorkerInfo workerInfo = Master.getWorkerSockets().get(workerId);
@@ -66,13 +67,11 @@ public class ServerThread extends Thread{
             outReducer = new ObjectOutputStream(reducerSocket.getOutputStream());
             inReducer = new ObjectInputStream(reducerSocket.getInputStream());
 
-            Request request1 = (Request) inReducer.readObject();
-            outClient.writeObject(request1);
+            Response response = (Response) inReducer.readObject();
+            outClient.writeObject(response);
             outClient.flush();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 

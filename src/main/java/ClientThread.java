@@ -1,4 +1,5 @@
 import entities.Request;
+import entities.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,18 +36,11 @@ public class ClientThread extends Thread{
             out.writeObject(request);
             out.flush();
 
-//            // write object Room
-//            out.writeObject(request);
-//            out.flush();
-
             // Wait and receive data from Master
-            Request response = (Request) in.readObject();
-
-//            // print the received results (from Room.toString())
-//            System.out.println("Room: " + room.toString());
+            Response response = (Response) in.readObject();
 
             //print the received results (from Request.toString())
-            System.out.println("Response: " + response.toString());
+            System.out.println("Response: " + response.getResponse());
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");

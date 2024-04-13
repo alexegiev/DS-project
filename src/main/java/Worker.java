@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Worker {
 
@@ -15,6 +16,7 @@ public class Worker {
     int workerPort;
     ObjectInputStream in;
     ObjectOutputStream out;
+    private CopyOnWriteArrayList<Room> roomList = new CopyOnWriteArrayList<>();
 
     private int sleepTime;
     private static final Object lock = new Object();
@@ -50,7 +52,6 @@ public class Worker {
             }
 
             int port = scanner.nextInt();
-
 
             new Worker().startWorkerInLocal(port);
         }
@@ -189,7 +190,7 @@ public class Worker {
                 masterCount++;
 
                 // create a new WorkerThread object
-                WorkerThread workerThread = new WorkerThread(masterSocket);
+                WorkerThread workerThread = new WorkerThread(masterSocket, this);
                 workerThread.start();
 
             } catch (IOException e) {
@@ -198,38 +199,13 @@ public class Worker {
         }
     }
 
-    public void run() {
-        try {
-            // change values ONLY FOR TESTING
-            Room testingRoom = (Room) in.readObject();
-            Thread.sleep(sleepTime);
-
-            // Connect to Reducer and send data
-            Socket reducerSocket = new Socket("localhost", 9092);
-            ObjectOutputStream reducerOut = new ObjectOutputStream(reducerSocket.getOutputStream());
-            reducerOut.writeObject(testingRoom);
-            reducerOut.flush();
-
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error: " + e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public void addRoom(Room room) {
+        synchronized (lock) {
+            roomList.add(room);
         }
-//        finally {
-//            try {
-//                in.close();
-//                out.close();
-//            } catch (IOException e) {
-//                System.out.println("Error: " + e);
-//            }
-//        }
     }
 
-    private void storeInMemory(Room room) {
-        // Create an ArrayList to store Room objects
-        List<Room> roomList = new ArrayList<>();
-        // Store the room object in the list
-        roomList.add(room);
-        System.out.println("Room information stored in memory: " + room);
+    public CopyOnWriteArrayList<Room> getRooms() {
+        return roomList;
     }
 }

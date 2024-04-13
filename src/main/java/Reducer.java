@@ -31,7 +31,7 @@ public class Reducer {
             try {
                 System.out.println("Waiting for Worker request");
                 Socket workerSocket = reducer.accept();
-                System.out.println("Connected to Worker: " + workerCount + " Timers");
+                System.out.println("Connected to Worker: " + workerCount + " Times");
                 workerCount++;
 
                 // create a new WorkerThread object
