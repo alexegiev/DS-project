@@ -17,7 +17,7 @@ public class Reducer {
     public Reducer() {
         try {
             reducer = new ServerSocket(9092);
-            System.out.println("Worker started at port: " + reducer.getLocalPort());
+            System.out.println("Reducer started at port: " + reducer.getLocalPort());
             waitForWorker();
         } catch (IOException e) {
             throw new RuntimeException(e);
