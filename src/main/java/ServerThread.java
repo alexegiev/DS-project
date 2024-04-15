@@ -40,27 +40,46 @@ public class ServerThread extends Thread{
 
             // Break down the request to Room and RequestId
             Request request = (Request) inClient.readObject();
-            Room testingRoom = request.getRoom();
+            Room room = request.getRoom();
             int requestId = request.getRequestId();
+            String action = request.getAction();
 
-            // Get Mapper from Master
-            Mapper mapper = Master.getMapper();
+            // Check the Request's action to know if we need one worker or all
+            if (action.equals("Show Owned Rooms")){
 
-            // Get from mapper the worker that will process the request
-            int workerId = mapper.mapRequest(testingRoom.getRoomId());
+                // Send the Request to all workers
+                for (WorkerInfo workerInfo : Master.getWorkerSockets()) {
+                    Socket connectedWorker = new Socket(workerInfo.getIp(), workerInfo.getPort());
+                    out = new ObjectOutputStream(connectedWorker.getOutputStream());
+                    in = new ObjectInputStream(connectedWorker.getInputStream());
+                    out.writeObject(request);
+                    out.flush();
+                }
 
-            // Get WorkerInfo from List
-            WorkerInfo workerInfo = Master.getWorkerSockets().get(workerId);
+            }
+            else{
 
-            // Print worker IP and socket
-            System.out.println("Selected Worker:  IP: " + workerInfo.getIp() + " Port: " + workerInfo.getPort());
+                // Get Mapper from Master
+                Mapper mapper = Master.getMapper();
 
-            // Connect to Worker and send data
-            Socket connectedWorker = new Socket(workerInfo.getIp(), workerInfo.getPort());
-            out = new ObjectOutputStream(connectedWorker.getOutputStream());
-            in = new ObjectInputStream(connectedWorker.getInputStream());
-            out.writeObject(request);
-            out.flush();
+                // Get from mapper the worker that will process the request
+                int workerId = mapper.mapRequest(requestId);
+
+                // Get WorkerInfo from List
+                WorkerInfo workerInfo = Master.getWorkerSockets().get(workerId);
+
+                // Print worker IP and socket
+                System.out.println("Selected Worker:  IP: " + workerInfo.getIp() + " Port: " + workerInfo.getPort());
+
+                // Connect to Worker and send data
+                Socket connectedWorker = new Socket(workerInfo.getIp(), workerInfo.getPort());
+                out = new ObjectOutputStream(connectedWorker.getOutputStream());
+                in = new ObjectInputStream(connectedWorker.getInputStream());
+                out.writeObject(request);
+                out.flush();
+            }
+
+
 
             // Connect to Reducer and receive data
             Socket reducerSocket = fromReducer.accept();

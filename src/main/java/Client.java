@@ -13,6 +13,7 @@ public class Client{
     // List of Managers and Renters of the systems
     static List<String> managers = Arrays.asList("manager1", "manager2", "manager3");
     static List<String> renters = Arrays.asList("renter1", "renter2", "renter3");
+    static int requestId = 1;
 
     private String login(){
 
@@ -67,7 +68,7 @@ public class Client{
 
     private static void managerActions(String username) {
 
-        Manager manager = new Manager();
+        Manager manager = new Manager(username);
         // show available actions for manager
         System.out.println("Choose available actions: " +
                 "\n1. Add Room" +
@@ -86,16 +87,30 @@ public class Client{
 
                     // For each room, create a ClientThread object which will handle the request
                     for (Room room : rooms) {
-                        new ClientThread(new Request(1, "Add Room", room)).start();
+                        requestId++;
+                        new ClientThread(new Request(requestId, "Add Room", room)).start();
                     }
-
                     break;
+
                 case 2:
                     // Add Room Availability Date
                     break;
+
                 case 3:
                     // Show Owned Rooms
+                    Request request = manager.showOwnedRooms(username);
+                    requestId++;
+
+                    // Add the requestId to the request object
+                    request.setRequestId(requestId);
+
+                    // Set the request Action
+                    request.setAction("Show Owned Rooms");
+
+                    // Create a new ClientThread object which will handle the request
+                    new ClientThread(request).start();
                     break;
+
                 default:
                     System.out.println("Invalid choice. Please enter a valid choice.");
                     break;
@@ -152,9 +167,6 @@ public class Client{
         } else {
             renterActions(username);
         }
-
-        //TODO: Form the appropriate Request object
-
 
         //TESTING
         //new Client(new Request(1,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();

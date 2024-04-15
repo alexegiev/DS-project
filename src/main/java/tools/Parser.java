@@ -31,7 +31,7 @@ public class Parser {
             Room room = new Room(
                     jsonObject.getString("roomName"),
                     jsonObject.getInt("roomId"),
-                    jsonObject.getInt("managerId"),
+                    jsonObject.getString("managerUsername"),
                     jsonObject.getString("area"),
                     jsonObject.getJsonNumber("rating").doubleValue(),
                     jsonObject.getInt("numberOfReviews"),

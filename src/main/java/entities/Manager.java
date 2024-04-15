@@ -11,40 +11,21 @@ import java.util.List;
 
 public class Manager extends Thread {
     private Room room;
+    private String managerUsername;
     private static final String MASTER_HOST = "localhost";
     private static final int MASTER_PORT = 9090;
 
-    public Manager() {
-
+    public Manager(String managerUsername) {
+        this.managerUsername = managerUsername;
     }
 
-//    @Override
-//    public void run() {
-//        try {
-//            // Connect to the Master
-//            Socket socket = new Socket(MASTER_HOST, MASTER_PORT);
-//            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-//
-//            // Send accommodation details to the Master
-//            out.writeObject(room);
-//            out.flush();
-//
-//            // Receive response from the Master (if any)
-//            Object response = in.readObject();
-//            if (response != null) {
-//                // Handle the response accordingly
-//                System.out.println("Received response from Master: " + response);
-//            }
-//
-//            // Close the streams and socket
-//            in.close();
-//            out.close();
-//            socket.close();
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public String getManagerUsername() {
+        return managerUsername;
+    }
+
+    public void setManagerUsername(String managerUsername) {
+        this.managerUsername = managerUsername;
+    }
 
     public List<Room> addRoomsFromJson(String username) {
 
@@ -68,7 +49,11 @@ public class Manager extends Thread {
         // TODO
     }
 
-    public void showOwnedRooms() {
-        // TODO
+    public Request showOwnedRooms(String username) {
+        // create appropriate Request object
+        Request request = new Request();
+        request.setAction("Show Owned Rooms");
+        request.setUsername(username);
+        return request;
     }
 }

@@ -12,7 +12,7 @@ public class Room implements Serializable {
     // Fields
     private String roomName;
     private int roomId;
-    private int managerId;
+    private String managerUsername;
     private String area;
     private double rating;
     private int numberOfReviews;
@@ -20,10 +20,10 @@ public class Room implements Serializable {
     private Map<Date, Date> availableDates; //key is the start date, value is the end date
 
     // Constructor
-    public Room(String roomName, int roomId, int managerId, String area, double rating, int numberOfReviews, String roomImage) {
+    public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews, String roomImage) {
         this.roomName = roomName;
         this.roomId = roomId;
-        this.managerId = managerId;
+        this.managerUsername = managerUsername;
         this.area = area;
         this.rating = rating;
         this.numberOfReviews = numberOfReviews;
@@ -48,12 +48,12 @@ public class Room implements Serializable {
         this.roomId = roomNumber;
     }
 
-    public int getManagerId() {
-        return managerId;
+    public String getManagerUsername() {
+        return managerUsername;
     }
 
-    public void setManagerIdId(int managerId) {
-        this.managerId = managerId;
+    public void setManagerUsername(String managerUsername) {
+        this.managerUsername = managerUsername;
     }
 
     public String getArea() {
@@ -105,7 +105,7 @@ public class Room implements Serializable {
         return "Room{" +
                 "roomName='" + roomName + '\'' +
                 ", roomId=" + roomId +
-                ", managerId=" + managerId +
+                ", managerUsername=" + managerUsername +
                 ", area='" + area + '\'' +
                 ", rating=" + rating +
                 ", numberOfReviews=" + numberOfReviews +
