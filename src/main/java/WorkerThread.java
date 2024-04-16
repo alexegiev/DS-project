@@ -59,6 +59,12 @@ public class WorkerThread extends Thread{
             }
             else if (request.getAction().equals("Show Owned Rooms")){
 
+                // Set the synchronized boolean to true to avoid concurrency issues
+                if (!(Worker.synchronizeWorkers)){
+                    Worker.synchronizeWorkers = true;
+                    Reducer.activeWorkers = Master.getWorkerSockets().size();
+                }
+
                 // Set the action of the response
                 response.setAction("Show Owned Rooms");
 
@@ -104,6 +110,17 @@ public class WorkerThread extends Thread{
             reducerOut.writeObject(response);
             reducerOut.flush();
 
+//            synchronized (Reducer.class) {
+//                if (Worker.synchronizeWorkers){
+//                    if (Reducer.activeWorkers>0){
+//                        Reducer.activeWorkers--;
+//                    }
+//                    else if (Reducer.activeWorkers <= 0){
+//                        Worker.synchronizeWorkers = false;
+//                        Reducer.activeWorkers = Master.getWorkerSockets().size();
+//                    }
+//                }
+//            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

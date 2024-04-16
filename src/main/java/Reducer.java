@@ -1,14 +1,20 @@
+import entities.Response;
 import entities.Room;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reducer {
 
     ServerSocket reducer = null;
-
+    public static int activeWorkers;
     private static int workerCount = 1;
+
+    public static List<Room> syncRooms = new ArrayList<>();
+    public static Response syncResponse = new Response();
 
     public static void main(String[] args) {
         new Reducer();
@@ -40,5 +46,13 @@ public class Reducer {
                 System.out.println("Error: " + e);
             }
         }
+    }
+
+    public synchronized static void addRoomToSyncRooms(Room room) {
+        syncRooms.add(room);
+    }
+
+    public synchronized static void clearSyncRooms() {
+        syncRooms.clear();
     }
 }

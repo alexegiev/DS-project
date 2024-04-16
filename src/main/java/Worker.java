@@ -21,6 +21,8 @@ public class Worker {
     private int sleepTime;
     private static final Object lock = new Object();
 
+    public static boolean synchronizeWorkers = false;
+
     static private int masterCount = 1;
 
     public static void main(String args[]) {

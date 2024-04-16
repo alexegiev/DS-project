@@ -1,13 +1,14 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Response implements Serializable {
 
     String response;
     String action;
-    List<Room> rooms;
+    List<Room> rooms = new ArrayList<>();
 
     private static final long serialVersionUID = -2971810955042798604L;
 
@@ -34,16 +35,20 @@ public class Response implements Serializable {
         this.action = action;
     }
 
-    public List<Room> getRooms() {
+    public synchronized List<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(List<Room> rooms) {
+    public synchronized void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
 
+    public synchronized void addRoomList(List<Room> rooms) {
+        this.rooms.addAll(rooms);
+    }
+
     // Add toString method that returns all Rooms from the list
-    public String getRoomsString() {
+    public synchronized String getRoomsString() {
         StringBuilder roomsString = new StringBuilder();
         for (Room room : rooms) {
             roomsString.append(room.toString()).append("\n");
