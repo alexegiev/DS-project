@@ -69,17 +69,19 @@ public class Client{
     private static void managerActions(String username) {
 
         Manager manager = new Manager(username);
-        // show available actions for manager
-        System.out.println("Choose available actions: " +
-                "\n1. Add Room" +
-                "\n2. Add Room Availability Date" +
-                "\n3. Show Owned Rooms" +
-                "\n4. Logout");
-
-        //TODO: Implement the actions
         Scanner action = new Scanner(System.in);
-        int choice = action.nextInt();
-        while (choice != 4) {
+        int choice;
+
+        do {
+            // show available actions for manager
+            System.out.println("Choose available actions: " +
+                    "\n1. Add Room" +
+                    "\n2. Add Room Availability Date" +
+                    "\n3. Show Owned Rooms" +
+                    "\n4. Logout");
+
+            //TODO: Implement the actions
+            choice = action.nextInt();
             switch (choice) {
                 case 1:
                     // Get Manager's Rooms from JSON
@@ -91,7 +93,6 @@ public class Client{
                         new ClientThread(new Request(requestId, "Add Room", room)).start();
                     }
                     break;
-
                 case 2:
                     // Add Room Availability Date
                     break;
@@ -115,24 +116,26 @@ public class Client{
                     System.out.println("Invalid choice. Please enter a valid choice.");
                     break;
             }
-            choice = action.nextInt();
-        }
+        } while (choice != 4);
+
         System.out.println("Logged out successfully.");
     }
 
     private static void renterActions(String username) {
 
-        // show available actions for renter
-        System.out.println("Choose available actions: " +
-                "\n1. Search Room" +
-                "\n2. Book Room" +
-                "\n3. Show Booked Rooms" +
-                "\n4. Logout");
-
-        //TODO: Implement the actions
         Scanner action = new Scanner(System.in);
-        int choice = action.nextInt();
-        while (choice != 4) {
+        int choice;
+
+        do {
+            // show available actions for renter
+            System.out.println("Choose available actions: " +
+                    "\n1. Search Room" +
+                    "\n2. Book Room" +
+                    "\n3. Show Booked Rooms" +
+                    "\n4. Logout");
+
+            //TODO: Implement the actions
+            choice = action.nextInt();
             switch (choice) {
                 case 1:
                     // Search Room
@@ -147,8 +150,8 @@ public class Client{
                     System.out.println("Invalid choice. Please enter a valid choice.");
                     break;
             }
-            choice = action.nextInt();
-        }
+        } while (choice != 4);
+
         System.out.println("Logged out successfully.");
     }
 

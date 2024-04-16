@@ -41,10 +41,10 @@ public class ReducerThread extends Thread {
 
     private synchronized void handleShowOwnedRooms(Response responseFromWorker) throws Exception {
         Reducer.activeWorkers--;
+        Thread.sleep(1000);
         Reducer.syncResponse.addRoomList(responseFromWorker.getRooms());
         System.out.println("Rooms owned by Manager: " + Reducer.syncResponse.getRoomsString());
         if (Reducer.activeWorkers <= 0) {
-            System.out.println("All workers have responded");
             sendResponseToServerThread("Show Owned Rooms");
         }
     }
@@ -53,7 +53,7 @@ public class ReducerThread extends Thread {
         sendResponseToServerThread("Room(s) Added");
     }
 
-    private void sendResponseToServerThread(String message){
+    private synchronized void sendResponseToServerThread(String message){
         try {
             Socket serverSocket = new Socket("localhost", 9093);
             ObjectOutputStream serverOut = new ObjectOutputStream(serverSocket.getOutputStream());
@@ -72,7 +72,15 @@ public class ReducerThread extends Thread {
             // Send the response to the ServerThread
             serverOut.writeObject(response);
             serverOut.flush();
+            Thread.sleep(1000);
+
+            // Clear Reducer's response and list
+            Reducer.syncResponse.setResponse("");
+            Reducer.syncResponse.getRooms().clear();
+
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

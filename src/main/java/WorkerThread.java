@@ -101,6 +101,7 @@ public class WorkerThread extends Thread{
                         System.out.println("Rooms found on this Worker Instance");
                     }
                 }
+                Thread.sleep(1000);
             }
 
             // Connect to Reducer and send data
