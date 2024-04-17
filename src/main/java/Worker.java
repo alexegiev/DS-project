@@ -194,6 +194,14 @@ public class Worker {
                 // create a new WorkerThread object
                 WorkerThread workerThread = new WorkerThread(masterSocket, this);
                 workerThread.start();
+                try {
+                    workerThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                // Add the WorkerThread to the list
+                Reducer.workerThreads.add(workerThread);
 
             } catch (IOException e) {
                 System.out.println("Error: " + e);

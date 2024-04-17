@@ -35,7 +35,7 @@ public class Master {
     private static int workerCount = 1;
 
     // List that contains all connected Workers
-    static ArrayList<WorkerInfo> workers = new ArrayList<>();
+    public static ArrayList<WorkerInfo> workers = new ArrayList<>();
 
     // Mapper object
     static Mapper mapper = null;
@@ -116,10 +116,12 @@ public class Master {
                 // Create WorkerInfo object and save to workers List
                 WorkerInfo workerInfo = new WorkerInfo(workerIp, workerPort);
                 workers.add(workerInfo);
+                Reducer.activeWorkers++;
 
                 System.out.println("Worker's IP: " + workerIp + " Port: " + workerPort);
 
                 System.out.println("Worker No. " + workers.size() + " connected ");
+                System.out.println("Workers List Size: " + workers.size());
                 mapper.increaseWorkers();
 
             }

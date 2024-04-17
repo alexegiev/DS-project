@@ -38,14 +38,11 @@ public class ServerThread extends Thread{
             inClient = new ObjectInputStream(clientSocket.getInputStream());
             //Room testingRoom = (Room) inClient.readObject(); TESTING
 
-            // Break down the request to Room and RequestId
             Request request = (Request) inClient.readObject();
-            Room room = request.getRoom();
             int requestId = request.getRequestId();
-            String action = request.getAction();
 
             // Check the Request's action to know if we need one worker or all
-            if (action.equals("Show Owned Rooms") || action.equals("Add Room Availability Date")){
+            if (request.getAction().equals("Show Owned Rooms") || request.getAction().equals("Add Room Availability Date")){
 
                 // Send the Request to all workers
                 for (WorkerInfo workerInfo : Master.getWorkerSockets()) {

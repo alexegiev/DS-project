@@ -25,18 +25,19 @@ public class ReducerThread extends Thread {
             ObjectOutputStream out = new ObjectOutputStream(workerSocket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(workerSocket.getInputStream());
 
-            Response responseFromWorker = (Response) in.readObject();
-            System.out.println("Response from worker: " + responseFromWorker);
+            synchronized(this) {
+                Response responseFromWorker = (Response) in.readObject();
+                System.out.println("Response from worker: " + responseFromWorker);
 
-            if (responseFromWorker.getAction().equals("Show Owned Rooms")) {
-                //System.out.println("Reducer received Show Owned Rooms");
-                handleShowOwnedRooms(responseFromWorker);
-            }
-            else if (responseFromWorker.getAction().equals("Add Room")) {
-                handleAddRoom(responseFromWorker);
-            }
-            else if (responseFromWorker.getAction().equals("Add Room Availability Date")) {
-                handleUpdateAvailabilityDate(responseFromWorker);
+                if (responseFromWorker.getAction().equals("Show Owned Rooms")) {
+                    handleShowOwnedRooms(responseFromWorker);
+                }
+                else if (responseFromWorker.getAction().equals("Add Room")) {
+                    handleAddRoom(responseFromWorker);
+                }
+                else if (responseFromWorker.getAction().equals("Add Room Availability Date")) {
+                    handleUpdateAvailabilityDate(responseFromWorker);
+                }
             }
 
         } catch (Exception e) {
@@ -45,36 +46,29 @@ public class ReducerThread extends Thread {
     }
 
     private void handleUpdateAvailabilityDate(Response responseFromWorker) throws InterruptedException {
-
-        // Reduce the activeWorkers count
-        Reducer.activeWorkers--;
-
-        // Put Thread to sleep
-        Thread.sleep(1000);
-
         // Check if the response is successful
         if (responseFromWorker.getResponse().equals("Room availability date added")) {
-            System.out.println("Room availability date added");
             // Set the response to the Reducer syncResponse
             Reducer.syncResponse.setResponse("Room availability date added");
         } else {
             System.out.println("Room availability date already exists");
         }
 
+        // Reduce the activeWorkers count
+        Reducer.activeWorkers--;
+
         // Check if all workers have responded
         if (Reducer.activeWorkers <= 0) {
+            // Print the message
+            System.out.println(Reducer.syncResponse.getResponse());
             sendResponseToServerThread(responseFromWorker);
         }
     }
 
     private synchronized void handleShowOwnedRooms(Response responseFromWorker) throws Exception {
-
         // Reduce the activeWorkers count
         Reducer.activeWorkers--;
-
-        // Put Thread to sleep
-        Thread.sleep(1000);
-
+        System.out.println("Active Workers: " + Reducer.activeWorkers);
         // Add the rooms to the syncResponse
         Reducer.syncResponse.addRoomList(responseFromWorker.getRooms());
         System.out.println("Rooms owned by Manager: " + Reducer.syncResponse.getRoomsString());
@@ -86,7 +80,13 @@ public class ReducerThread extends Thread {
     }
 
     private void handleAddRoom(Response responseFromWorker) throws Exception {
-        sendResponseToServerThread(responseFromWorker);
+        // Reduce the activeWorkers count
+        Reducer.activeWorkers--;
+
+        // Check if all workers have responded
+        if (Reducer.activeWorkers <= 0) {
+            sendResponseToServerThread(responseFromWorker);
+        }
     }
 
     private synchronized void sendResponseToServerThread(Response responseFromWorker){
@@ -100,17 +100,15 @@ public class ReducerThread extends Thread {
             // Check the message value and send the according response
             if (responseFromWorker.getAction().equals("Add Room")) {
                 response.setResponse(responseFromWorker.getResponse());
+                response.setAction("Add Room");
             }
             else if (responseFromWorker.getAction().equals("Show Owned Rooms")) {
-                //Reducer.syncResponse.setResponse("Rooms owned by Manager FROM REDUCER: " + "\n" +Reducer.syncResponse.getRoomsString());
+                response.setAction("Show Owned Rooms");
                 response.setResponse("Rooms owned by Manager: " + "\n" + Reducer.syncResponse.getRoomsString());
             } else if (responseFromWorker.getAction().equals("Add Room Availability Date")) {
-                // Check if Reducer syncResponse is empty
-                if (Reducer.syncResponse.getResponse().equals("") || Reducer.syncResponse.getResponse() == null){
-                    response.setResponse(responseFromWorker.getResponse());
-                } else {
-                    response.setResponse("Room availability date added");
-                }
+                // Set the response based on the response from the worker
+                response.setResponse(responseFromWorker.getResponse());
+                response.setAction("Add Room Availability Date");
             }
 
             // Send the response to the ServerThread
@@ -121,11 +119,23 @@ public class ReducerThread extends Thread {
             // Clear Reducer's response and list
             Reducer.syncResponse.setResponse("");
             Reducer.syncResponse.getRooms().clear();
+            Reducer.activeWorkers = Master.workers.size();
+            System.out.println("AFTER Active Workers: " + Reducer.activeWorkers);
+
+            // Clear all active WorkerThreads
+            clearWorkerThreads();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void clearWorkerThreads() {
+        for (WorkerThread workerThread : Reducer.workerThreads) {
+            workerThread.interrupt();
+        }
+        Reducer.workerThreads.clear();
     }
 }

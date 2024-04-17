@@ -10,11 +10,13 @@ import java.util.List;
 public class Reducer {
 
     ServerSocket reducer = null;
-    public static int activeWorkers;
+    public static int activeWorkers = 0;
     private static int workerCount = 1;
 
     public static List<Room> syncRooms = new ArrayList<>();
     public static Response syncResponse = new Response();
+
+    public static List<WorkerThread> workerThreads = new ArrayList<>();
 
     public static void main(String[] args) {
         new Reducer();
@@ -24,6 +26,7 @@ public class Reducer {
         try {
             reducer = new ServerSocket(9092);
             System.out.println("Reducer started at port: " + reducer.getLocalPort());
+            System.out.println("Workers: " + Master.workers.size());
             waitForWorker();
         } catch (IOException e) {
             throw new RuntimeException(e);

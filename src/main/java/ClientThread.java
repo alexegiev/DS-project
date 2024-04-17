@@ -40,7 +40,13 @@ public class ClientThread extends Thread{
             Response response = (Response) in.readObject();
 
             //print the received results (from Request.toString())
-            System.out.println("Response: " + response.getResponse());
+            if(response.getAction().equals("Show Owned Rooms") || response.getAction().equals("Add Room Availability Date")) {
+                System.out.println(response.getResponse());
+            }
+            else if(response.getAction().equals("Add Room")) {
+                System.out.println("Response: " + response.getResponse());
+            }
+
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");

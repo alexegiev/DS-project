@@ -51,11 +51,11 @@ public class WorkerThread extends Thread{
 
                 // check the message value and send the according response
                 if (message.equals("Room added")){
-                    response.setResponse("Room added");
-                    System.out.println("Room added");
+                    response.setResponse("Room(s) added");
+                    System.out.println("Room(s) added");
                 } else {
-                    response.setResponse("Room already exists");
-                    System.out.println("Room already exists");
+                    response.setResponse("Room(s) already exists");
+                    System.out.println("Room(s) already exists");
                 }
             }
             else if (request.getAction().equals("Show Owned Rooms")){
@@ -63,7 +63,8 @@ public class WorkerThread extends Thread{
                 // Set the synchronized boolean to true to avoid concurrency issues
                 if (!(Worker.synchronizeWorkers)){
                     Worker.synchronizeWorkers = true;
-                    Reducer.activeWorkers = Master.getWorkerSockets().size();
+                    Reducer.activeWorkers = Master.workers.size() + 3;
+                    System.out.println("Active Workers: " + Reducer.activeWorkers);
                 }
 
                 // Set the action of the response
@@ -93,7 +94,7 @@ public class WorkerThread extends Thread{
                     }
                     // Check if responseRooms is empty and set up the appropriate response
                     if (responseRooms.isEmpty()){
-                        response.setResponse("No rooms found");
+                        response.setResponse("No rooms found for this Manager");
                         System.out.println("No rooms found on this Worker Instance");
                     }
                     else {
@@ -109,7 +110,6 @@ public class WorkerThread extends Thread{
                 // Set the synchronized boolean to true to avoid concurrency issues
                 if (!(Worker.synchronizeWorkers)){
                     Worker.synchronizeWorkers = true;
-                    Reducer.activeWorkers = Master.getWorkerSockets().size();
                 }
 
                 // Set the action of the response
@@ -140,10 +140,10 @@ public class WorkerThread extends Thread{
                     }
                     // Check if responseRooms is empty and set up the appropriate response
                     if (responseRooms.isEmpty()) {
-                        response.setResponse("No rooms found");
+                        response.setResponse("No rooms found for this Manager");
                         System.out.println("No rooms found on this Worker Instance");
                     } else {
-                        response.setResponse("Rooms found");
+                        response.setResponse("Room availability date added");
                         response.setRooms(responseRooms);
                         System.out.println("Rooms found on this Worker Instance");
                     }

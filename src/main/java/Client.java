@@ -81,6 +81,8 @@ public class Client{
         Scanner action = new Scanner(System.in);
         int choice = action.nextInt();
         while (choice != 4) {
+            ClientThread clientThread = null;
+
             switch (choice) {
                 case 1:
                     // Get Manager's Rooms from JSON
@@ -89,25 +91,33 @@ public class Client{
                     // For each room, create a ClientThread object which will handle the request
                     for (Room room : rooms) {
                         requestId++;
-                        new ClientThread(new Request(requestId, "Add Room", room)).start();
+                        clientThread = new ClientThread(new Request(requestId, "Add Room", room));
+                        clientThread.start();
+                        try {
+                            clientThread.join(); // wait for the ClientThread to finish
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
 
                 case 2:
                     // Add Room Availability Date
 
+                    // Create new Scanner
+                    Scanner select = new Scanner(System.in);
                     // Get Room Name from Manager
                     System.out.println("Enter Room Name: ");
-                    String roomName = action.next();
+                    String roomName = select.next();
 
                     // Get from Manager the From date and parse it to a Date object
                     System.out.println("Enter From Date (yyyy-MM-dd): ");
-                    String fromDate = action.next();
+                    String fromDate = select.next();
                     Date from = Date.valueOf(fromDate);
 
                     // Get from Manager the To date and parse it to a Date object
                     System.out.println("Enter To Date (yyyy-MM-dd): ");
-                    String toDate = action.next();
+                    String toDate = select.next();
                     Date to = Date.valueOf(toDate);
 
                     // Create a new Room object with the given parameters
@@ -122,8 +132,13 @@ public class Client{
                     // Create a new Request object with the given parameters
                     Request requestToUpdate = new Request(requestId, "Add Room Availability Date", roomToUpdate);
 
-                    // Create a new ClientThread object which will handle the request
-                    new ClientThread(requestToUpdate).start();
+                    clientThread = new ClientThread(requestToUpdate);
+                    clientThread.start();
+                    try {
+                        clientThread.join(); // wait for the ClientThread to finish
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case 3:
@@ -137,8 +152,13 @@ public class Client{
                     // Set the request Action
                     request.setAction("Show Owned Rooms");
 
-                    // Create a new ClientThread object which will handle the request
-                    new ClientThread(request).start();
+                    clientThread = new ClientThread(request);
+                    clientThread.start();
+                    try {
+                        clientThread.join(); // wait for the ClientThread to finish
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 default:
