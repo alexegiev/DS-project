@@ -45,7 +45,7 @@ public class ServerThread extends Thread{
             String action = request.getAction();
 
             // Check the Request's action to know if we need one worker or all
-            if (action.equals("Show Owned Rooms")){
+            if (action.equals("Show Owned Rooms") || action.equals("Add Room Availability Date")){
 
                 // Send the Request to all workers
                 for (WorkerInfo workerInfo : Master.getWorkerSockets()) {
@@ -55,7 +55,6 @@ public class ServerThread extends Thread{
                     out.writeObject(request);
                     out.flush();
                 }
-
             }
             else{
 

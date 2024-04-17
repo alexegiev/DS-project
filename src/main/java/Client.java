@@ -1,3 +1,4 @@
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -69,19 +70,17 @@ public class Client{
     private static void managerActions(String username) {
 
         Manager manager = new Manager(username);
+        // show available actions for manager
+        System.out.println("Choose available actions: " +
+                "\n1. Add Room" +
+                "\n2. Add Room Availability Date" +
+                "\n3. Show Owned Rooms" +
+                "\n4. Logout");
+
+        //TODO: Implement the actions
         Scanner action = new Scanner(System.in);
-        int choice;
-
-        do {
-            // show available actions for manager
-            System.out.println("Choose available actions: " +
-                    "\n1. Add Room" +
-                    "\n2. Add Room Availability Date" +
-                    "\n3. Show Owned Rooms" +
-                    "\n4. Logout");
-
-            //TODO: Implement the actions
-            choice = action.nextInt();
+        int choice = action.nextInt();
+        while (choice != 4) {
             switch (choice) {
                 case 1:
                     // Get Manager's Rooms from JSON
@@ -93,8 +92,38 @@ public class Client{
                         new ClientThread(new Request(requestId, "Add Room", room)).start();
                     }
                     break;
+
                 case 2:
                     // Add Room Availability Date
+
+                    // Get Room Name from Manager
+                    System.out.println("Enter Room Name: ");
+                    String roomName = action.next();
+
+                    // Get from Manager the From date and parse it to a Date object
+                    System.out.println("Enter From Date (yyyy-MM-dd): ");
+                    String fromDate = action.next();
+                    Date from = Date.valueOf(fromDate);
+
+                    // Get from Manager the To date and parse it to a Date object
+                    System.out.println("Enter To Date (yyyy-MM-dd): ");
+                    String toDate = action.next();
+                    Date to = Date.valueOf(toDate);
+
+                    // Create a new Room object with the given parameters
+                    Room roomToUpdate = new Room();
+                    roomToUpdate.setRoomName(roomName);
+                    roomToUpdate.addAvailableDates(from, to);
+                    roomToUpdate.setManagerUsername(username);
+
+                    // Increase the requestId
+                    requestId++;
+
+                    // Create a new Request object with the given parameters
+                    Request requestToUpdate = new Request(requestId, "Add Room Availability Date", roomToUpdate);
+
+                    // Create a new ClientThread object which will handle the request
+                    new ClientThread(requestToUpdate).start();
                     break;
 
                 case 3:
@@ -116,8 +145,8 @@ public class Client{
                     System.out.println("Invalid choice. Please enter a valid choice.");
                     break;
             }
-        } while (choice != 4);
-
+            choice = action.nextInt();
+        }
         System.out.println("Logged out successfully.");
     }
 

@@ -50,8 +50,10 @@ public class Response implements Serializable {
     // Add toString method that returns all Rooms from the list
     public synchronized String getRoomsString() {
         StringBuilder roomsString = new StringBuilder();
+        int counter = 1;
         for (Room room : rooms) {
-            roomsString.append(room.toString()).append("\n");
+            roomsString.append(counter).append(". ").append(room.toString()).append("\n");
+            counter++;
         }
         return roomsString.toString();
     }

@@ -1,6 +1,7 @@
 package entities;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -17,7 +18,7 @@ public class Room implements Serializable {
     private double rating;
     private int numberOfReviews;
     private String roomImage;
-    private Map<Date, Date> availableDates; //key is the start date, value is the end date
+    private Map<Date, Date> availableDates = new HashMap<>(); //key is the start date, value is the end date
 
     // Constructor
     public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews, String roomImage) {
@@ -28,6 +29,10 @@ public class Room implements Serializable {
         this.rating = rating;
         this.numberOfReviews = numberOfReviews;
         this.roomImage = roomImage;
+    }
+
+    public Room(){
+
     }
 
 
@@ -95,6 +100,11 @@ public class Room implements Serializable {
     public void addAvailableDates(Date startDate, Date endDate) {
         this.availableDates.put(startDate, endDate);
     }
+
+    public void insertAvailableDates(Map<Date, Date> dates) {
+        this.availableDates.putAll(dates);
+    }
+
 
     public void reserveDates(Date startDate, Date endDate) {
         this.availableDates.remove(startDate, endDate);
