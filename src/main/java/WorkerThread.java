@@ -149,6 +149,50 @@ public class WorkerThread extends Thread{
                     }
                 }
             }
+            else if (request.getAction().equals("Add Rating")) {
+
+                // Set the synchronized boolean to true to avoid concurrency issues
+                if (!(Worker.synchronizeWorkers)) {
+                    Worker.synchronizeWorkers = true;
+                    Reducer.activeWorkers = Master.getWorkerSockets().size();
+                }
+                // Set the action of the response
+                response.setAction("Add Rating");
+
+                // Get all rooms from Worker's instance
+                List<Room> rooms = getRooms();
+
+                // Check if rooms is empty
+                if (rooms.isEmpty()){
+                    response.setResponse("No rooms found");
+                    System.out.println("No rooms found on this Worker Instance Here?");
+                }
+                else {
+                    System.out.println("Room(s) found on this Worker Instance");
+                    // Create a list of Rooms to send to Reducer
+                    List<Room> responseRooms = new ArrayList<>();
+                    for (Room room : rooms) {
+
+                        // check if in this Room the roomName is the same as the Request's roomName
+                        if (room.getRoomName().equals(request.getRoom().getRoomName())) {
+
+                            // add rating to the room
+                            room.setRating(request.getRoom().getRating());
+                            responseRooms.add(room);
+                            System.out.println("Room added to response");
+                        }
+                    }
+                    // Check if responseRooms is empty and set up the appropriate response
+                    if (responseRooms.isEmpty()) {
+                        response.setResponse("No rooms found");
+                        System.out.println("No rooms found on this Worker Instance");
+                    } else {
+                        response.setResponse("Rooms found");
+                        response.setRooms(responseRooms);
+                        System.out.println("Rooms found on this Worker Instance");
+                    }
+                }
+            }
 
             // Connect to Reducer and send data
             Socket reducerSocket = new Socket("localhost", 9092);

@@ -69,9 +69,7 @@ public class Room implements Serializable {
         this.area = area;
     }
 
-    public double getRating() {
-        return rating;
-    }
+    public double getRating() {return rating;}
 
     public void setRating(double rating) {
         this.rating = rating;
@@ -103,6 +101,10 @@ public class Room implements Serializable {
 
     public void insertAvailableDates(Map<Date, Date> dates) {
         this.availableDates.putAll(dates);
+    }
+
+    public void insertRating(Date startDate, Date endDate) {
+        this.availableDates.put(startDate, endDate);
     }
 
 

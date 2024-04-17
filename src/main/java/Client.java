@@ -161,7 +161,8 @@ public class Client{
                     "\n1. Search Room" +
                     "\n2. Book Room" +
                     "\n3. Show Booked Rooms" +
-                    "\n4. Logout");
+                    "\n4. Rate Room" +
+                    "\n5. Logout");
 
             //TODO: Implement the actions
             choice = action.nextInt();
@@ -175,11 +176,35 @@ public class Client{
                 case 3:
                     // Show Booked Rooms
                     break;
+                case 4:
+                    // Add Room Rating
+
+                    // Get Room Name
+                    System.out.println("Enter Room Name: ");
+                    String roomName = action.next();
+                    // Get from Renter the Rating number and parse it to a Rating object
+                    System.out.println("Enter your Rating for the room ");
+                    String Rating = action.next();
+                    Double Rate = Double.valueOf(Rating);
+
+                    // Create a new Room object with the given parameters
+                    Room roomToUpdate = new Room();
+                    roomToUpdate.setRoomName(roomName);
+                    roomToUpdate.setRating(Rate);
+                    // Increase the requestId
+                    requestId++;
+
+                    // Create a new Request object with the given parameters
+                    Request requestToUpdate = new Request(requestId, "Add Rating", roomToUpdate);
+
+                    // Create a new ClientThread object which will handle the request
+                    new ClientThread(requestToUpdate).start();
+                    break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid choice.");
                     break;
             }
-        } while (choice != 4);
+        } while (choice != 5);
 
         System.out.println("Logged out successfully.");
     }

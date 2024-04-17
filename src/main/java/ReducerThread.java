@@ -38,11 +38,37 @@ public class ReducerThread extends Thread {
             else if (responseFromWorker.getAction().equals("Add Room Availability Date")) {
                 handleUpdateAvailabilityDate(responseFromWorker);
             }
+            else if (responseFromWorker.getAction().equals("Add Rating")) {
+                handleUpdateRoomRating(responseFromWorker);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+    private void handleUpdateRoomRating(Response responseFromWorker) throws InterruptedException {
+        // Reduce the activeWorkers count
+        Reducer.activeWorkers--;
+
+        // Put Thread to sleep
+        Thread.sleep(1000);
+
+        // Check if the response is successful
+        if (responseFromWorker.getResponse().equals("Add Rating")) {
+            System.out.println("Rating added");
+            // Set the response to the Reducer syncResponse
+            Reducer.syncResponse.setResponse("Rating added");
+        } else {
+            System.out.println("Rating didnt added ");
+        }
+
+        // Check if all workers have responded
+        if (Reducer.activeWorkers <= 0) {
+            sendResponseToServerThread(responseFromWorker);
+        }
+    }
+
+    
 
     private void handleUpdateAvailabilityDate(Response responseFromWorker) throws InterruptedException {
 
