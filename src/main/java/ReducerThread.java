@@ -42,19 +42,25 @@ public class ReducerThread extends Thread {
 
     private synchronized void handleAddRoom(Response responseFromWorker) throws Exception {
 
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Add Room");
         // Check if the response is successful
         if (responseFromWorker.getResponse().equals("Room(s) added")) {
             // Set the response to the Reducer syncResponse
             Reducer.syncResponse.setResponse("Room(s) added");
+            System.out.println("Room(s) added");
         } else {
             System.out.println("Room(s) already exists");
         }
 
         // Reduce the activeWorkers count
-        Reducer.activeWorkers--;
+        Reducer.reduceActiveWorkers();
     }
 
     private synchronized void handleUpdateAvailabilityDate(Response responseFromWorker) throws InterruptedException {
+
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Add Room Availability Date");
         // Check if the response is successful
         if (responseFromWorker.getResponse().equals("Room availability date added")) {
             // Set the response to the Reducer syncResponse
@@ -64,16 +70,20 @@ public class ReducerThread extends Thread {
         }
 
         // Reduce the activeWorkers count
-        Reducer.activeWorkers--;
+        Reducer.reduceActiveWorkers();
     }
 
     private synchronized void handleShowOwnedRooms(Response responseFromWorker) throws Exception {
-        // Reduce the activeWorkers count
-        Reducer.activeWorkers--;
-        System.out.println("Active Workers: " + Reducer.activeWorkers);
+
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Show Owned Rooms");
         // Add the rooms to the syncResponse
         Reducer.syncResponse.addRoomList(responseFromWorker.getRooms());
         System.out.println("Rooms owned by Manager: " + Reducer.syncResponse.getRoomsString());
+        // Add the response to the syncResponse
+        Reducer.syncResponse.setResponse("Rooms owned by Manager: " + "\n" + Reducer.syncResponse.getRoomsString());
+        // Reduce the activeWorkers count
+        Reducer.reduceActiveWorkers();
     }
 
 //    private synchronized void sendResponseToServerThread(Response responseFromWorker){

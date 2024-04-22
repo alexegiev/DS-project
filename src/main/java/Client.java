@@ -93,11 +93,6 @@ public class Client{
                         requestId++;
                         clientThread = new ClientThread(new Request(requestId, "Add Room", room));
                         clientThread.start();
-                        try {
-                            clientThread.join(); // wait for the ClientThread to finish
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                     break;
 
@@ -134,11 +129,6 @@ public class Client{
 
                     clientThread = new ClientThread(requestToUpdate);
                     clientThread.start();
-                    try {
-                        clientThread.join(); // wait for the ClientThread to finish
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     break;
 
                 case 3:
@@ -154,11 +144,6 @@ public class Client{
 
                     clientThread = new ClientThread(request);
                     clientThread.start();
-                    try {
-                        clientThread.join(); // wait for the ClientThread to finish
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     break;
 
                 default:

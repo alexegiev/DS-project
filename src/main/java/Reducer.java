@@ -34,9 +34,9 @@ public class Reducer {
             reducer = new ServerSocket(9092);
             System.out.println("Reducer started at port: " + reducer.getLocalPort());
 
-            // Connect to Master on port 9094
+            // Connect to Master on port 9099
             // CHANGE "localhost" to Master's IP address
-            Socket masterSocket = new Socket("localhost", 9094);
+            Socket masterSocket = new Socket("localhost", 9099);
             System.out.println("Connected to Master");
 
             // Get from Master the number of Workers
@@ -57,7 +57,6 @@ public class Reducer {
 
             // Start the Reducer
             new Thread(this::waitForWorker).start();
-            //new Thread(this::sendResponse).start();
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -81,25 +80,23 @@ public class Reducer {
         }
     }
 
-    public void sendResponse(){
+    public static void sendResponse(){
 
-        // Check if activeWorkers is 0 (every Worker finished its process)
-        if (activeWorkers == 0) {
-            // Send the response to Master
-            try {
-                // Connect to Master CHANGE "localhost" to Master's IP address
-                Socket masterSocket = new Socket("localhost", 9093);
-                ObjectOutputStream out = new ObjectOutputStream(masterSocket.getOutputStream());
-                out.writeObject(syncResponse);
-                out.flush();
-                System.out.println("Response sent to Master");
+        try {
+            System.out.println("Sending response to Master");
+            System.out.println("SyncResponse: " + syncResponse.getResponse());
+            // Connect to Master CHANGE "localhost" to Master's IP address
+            Socket masterSocket = new Socket("localhost", 9093);
+            ObjectOutputStream out = new ObjectOutputStream(masterSocket.getOutputStream());
+            out.writeObject(syncResponse);
+            out.flush();
+            System.out.println("Response sent to Master");
 
-                // Reset the activeWorkers
-                activeWorkers = workers;
+            // Reset the activeWorkers
+            activeWorkers = workers;
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -109,5 +106,24 @@ public class Reducer {
 
     public synchronized static void clearSyncRooms() {
         syncRooms.clear();
+    }
+
+    public synchronized static void reduceActiveWorkers() {
+        activeWorkers--;
+        System.out.println("Active Workers: " + activeWorkers);
+
+        // Check if all workers have finished
+        if (activeWorkers == 0) {
+            // Send the response to Master
+            sendResponse();
+            // Clear the syncRooms
+            clearSyncRooms();
+            // Clear the syncResponse.rooms
+            syncResponse.clearRooms();
+            // Clear the syncResponse
+            syncResponse.setResponse("");
+            // Reset the activeWorkers
+            activeWorkers = workers;
+        }
     }
 }

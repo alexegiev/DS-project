@@ -77,7 +77,7 @@ public class Master {
         try {
             server = new ServerSocket(9090);
             worker = new ServerSocket(9095);
-            reducer = new ServerSocket(9094);
+            reducer = new ServerSocket(9099);
             System.out.println("Server started at port: " + server.getLocalPort());
 
             // Start separate threads for accepting workers, clients and the Reducer
@@ -200,5 +200,14 @@ public class Master {
     public static void main(String[] args){
 
         Master master = new Master();
+        // get int use input
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        if (choice == 1) {
+            // print the workers list
+            for (WorkerInfo workerInfo : workers) {
+                System.out.println("Worker IP: " + workerInfo.getIp() + " Port: " + workerInfo.getPort());
+            }
+        }
     }
 }

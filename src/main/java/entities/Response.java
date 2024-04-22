@@ -47,6 +47,10 @@ public class Response implements Serializable {
         this.rooms.addAll(rooms);
     }
 
+    public synchronized void clearRooms() {
+        rooms.clear();
+    }
+
     // Add toString method that returns all Rooms from the list
     public synchronized String getRoomsString() {
         StringBuilder roomsString = new StringBuilder();
