@@ -28,6 +28,9 @@ public class Master {
     Socket clientSocket = null;
     Socket reducerSocket = null;
 
+    // Define socket that is used to send the Reducer (upon his connection) the number of active workers (used for thread synchronization)
+    ServerSocket reducer = null;
+
     ObjectOutputStream clientOut = null;
     ObjectInputStream clientIn = null;
 
@@ -74,11 +77,13 @@ public class Master {
         try {
             server = new ServerSocket(9090);
             worker = new ServerSocket(9095);
+            reducer = new ServerSocket(9094);
             System.out.println("Server started at port: " + server.getLocalPort());
 
-            // Start separate threads for accepting workers and clients
+            // Start separate threads for accepting workers, clients and the Reducer
             new Thread(this::waitForWorker).start();
             new Thread(this::waitForClient).start();
+            new Thread(this::waitForReducer).start();
         }
         catch (SocketException e) {
             e.printStackTrace();
@@ -86,6 +91,33 @@ public class Master {
         catch(IOException e){
             System.out.println("Error: " + e);
             return;
+        }
+    }
+
+    private void waitForReducer() {
+        while(true){
+            try{
+                // Functionality for Reducer requests
+                Socket newReducerSocket = reducer.accept();
+
+                // Create a new ObjectInputStream object
+                ObjectOutputStream out = new ObjectOutputStream(newReducerSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(newReducerSocket.getInputStream());
+
+                // Read the request from the Reducer
+                String request = (String) in.readObject();
+                System.out.println("Request from Reducer: " + request);
+
+                // Send the number of active workers to the Reducer
+                if (request.equals("Send number of Workers")) {
+                    out.writeObject(workers.size());
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
