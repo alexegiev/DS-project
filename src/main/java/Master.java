@@ -98,6 +98,7 @@ public class Master {
         while(true){
             try{
                 // Functionality for Reducer requests
+                assert reducer != null;
                 Socket newReducerSocket = reducer.accept();
 
                 // Create a new ObjectInputStream object
@@ -111,11 +112,13 @@ public class Master {
                 // Send the number of active workers to the Reducer
                 if (request.equals("Send number of Workers")) {
                     out.writeObject(workers.size());
+                    out.flush();
+
+                    // Close this connection
+                    newReducerSocket.close();
                 }
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }

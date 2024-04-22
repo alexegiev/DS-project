@@ -19,6 +19,8 @@ public class Reducer {
 
     public static List<WorkerThread> workerThreads = new ArrayList<>();
 
+    private static int workers; // used for resetting
+
     public static void main(String[] args) {
         new Reducer();
     }
@@ -46,10 +48,17 @@ public class Reducer {
 
             // Receive the number of Workers and set the number of activeWorkers
             activeWorkers = (int) inMaster.readObject();
+            workers = activeWorkers;
+
             System.out.println("Number of Workers: " + activeWorkers);
 
+            // Close the connection with Master
+            masterSocket.close();
+
             // Start the Reducer
-            waitForWorker();
+            new Thread(this::waitForWorker).start();
+            //new Thread(this::sendResponse).start();
+
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -68,6 +77,28 @@ public class Reducer {
                 reducerThread.start();
             } catch (IOException e) {
                 System.out.println("Error: " + e);
+            }
+        }
+    }
+
+    public void sendResponse(){
+
+        // Check if activeWorkers is 0 (every Worker finished its process)
+        if (activeWorkers == 0) {
+            // Send the response to Master
+            try {
+                // Connect to Master CHANGE "localhost" to Master's IP address
+                Socket masterSocket = new Socket("localhost", 9093);
+                ObjectOutputStream out = new ObjectOutputStream(masterSocket.getOutputStream());
+                out.writeObject(syncResponse);
+                out.flush();
+                System.out.println("Response sent to Master");
+
+                // Reset the activeWorkers
+                activeWorkers = workers;
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
