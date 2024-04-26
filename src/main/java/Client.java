@@ -173,6 +173,29 @@ public class Client{
             switch (choice) {
                 case 1:
                     // Search Room
+
+                    // Create new Scanner object
+                    Scanner select = new Scanner(System.in);
+                    System.out.println("Use filter: " +
+                            "\n1. Room Name" +
+                            "\n2. Room Area" +
+                            "\n3. Availability Dates" +
+                            "\n4. People capacity" +
+                            "\n5. Price" +
+                            "\n6. Rating");
+
+                    int filter;
+                    System.out.print("Enter the value for the filter: ");
+
+                    // Get the filter from the Renter
+                    filter = select.nextInt();
+
+                    // Check if filter is valid input or not a number
+                    while (filter < 1 || filter > 6) {
+                        System.out.println("Invalid choice. Please enter a valid choice.");
+                        filter = select.nextInt();
+                    }
+
                     break;
                 case 2:
                     // Book Room
