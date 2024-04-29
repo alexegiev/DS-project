@@ -8,6 +8,8 @@ public class Response implements Serializable {
 
     String response;
     String action;
+    String filterType;
+    String filterValue;
     List<Room> rooms = new ArrayList<>();
 
     private static final long serialVersionUID = -2971810955042798604L;
@@ -37,6 +39,22 @@ public class Response implements Serializable {
 
     public synchronized List<Room> getRooms() {
         return rooms;
+    }
+
+    public String getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(String filterType) {
+        this.filterType = filterType;
+    }
+
+    public String getFilterValue() {
+        return filterValue;
+    }
+
+    public void setFilterValue(String filterValue) {
+        this.filterValue = filterValue;
     }
 
     public synchronized void setRooms(List<Room> rooms) {

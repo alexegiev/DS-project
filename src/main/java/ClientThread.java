@@ -40,7 +40,7 @@ public class ClientThread extends Thread{
             Response response = (Response) in.readObject();
 
             //print the received results (from Request.toString())
-            if(response.getAction().equals("Show Owned Rooms") || response.getAction().equals("Add Room Availability Date")) {
+            if(response.getAction().equals("Show Owned Rooms") || response.getAction().equals("Add Room Availability Date") || response.getAction().equals("Search Room")) {
                 System.out.println(response.getResponse());
             }
             else if(response.getAction().equals("Add Room")) {

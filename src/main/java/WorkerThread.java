@@ -178,6 +178,12 @@ public class WorkerThread extends Thread{
                     // Create a list of Rooms to send to Reducer
                     List<Room> responseRooms = new ArrayList<>();
 
+                    // Set the filter type
+                    response.setFilterType(request.getFilterType());
+
+                    // Set the filter value
+                    response.setFilterValue(request.getFilterValue());
+
                     // Check for the Request.filterType for the Search filter
                     if (request.getFilterType().equals("Room Name")){
                         for (Room room : rooms) {
@@ -233,7 +239,15 @@ public class WorkerThread extends Thread{
                             }
                         }
                     }
+                    // Check if responseRooms is empty and set up the appropriate response
+                    if (responseRooms.isEmpty()) {
+                        System.out.println("No rooms found on this Worker Instance");
+                    } else {
+                        response.setRooms(responseRooms);
+                        System.out.println("Rooms found on this Worker Instance");
+                    }
                 }
+
             }
 
             // Connect to Reducer and send data

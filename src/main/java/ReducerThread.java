@@ -33,11 +33,29 @@ public class ReducerThread extends Thread {
                     case "Add Room" -> handleAddRoom(responseFromWorker);
                     case "Add Room Availability Date" -> handleUpdateAvailabilityDate(responseFromWorker);
                     case "Show Owned Rooms" -> handleShowOwnedRooms(responseFromWorker);
+                    case "Search Room" -> handleSearchRoom(responseFromWorker);
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void handleSearchRoom(Response responseFromWorker) {
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Search Room");
+        // Set the filter type
+        Reducer.syncResponse.setFilterType(responseFromWorker.getFilterType());
+        // Set the filter value
+        Reducer.syncResponse.setFilterValue(responseFromWorker.getFilterValue());
+        // Add the rooms to the syncResponse
+        Reducer.syncResponse.addRoomList(responseFromWorker.getRooms());
+
+        System.out.println("Rooms found: " + Reducer.syncResponse.getRoomsString());
+        // Add the response to the syncResponse
+        Reducer.syncResponse.setResponse("Rooms found using the filter: " + responseFromWorker.getFilterType() + " = " + responseFromWorker.getFilterValue() + "\n" + Reducer.syncResponse.getRoomsString());
+        // Reduce the activeWorkers count
+        Reducer.reduceActiveWorkers();
     }
 
     private synchronized void handleAddRoom(Response responseFromWorker) throws Exception {

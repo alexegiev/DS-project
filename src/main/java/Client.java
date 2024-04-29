@@ -250,6 +250,7 @@ public class Client{
 
                     // Create a new ClientThread object with the given request
                     ClientThread clientThread = new ClientThread(request);
+                    clientThread.start();
                     break;
                 case 2:
                     // Book Room
