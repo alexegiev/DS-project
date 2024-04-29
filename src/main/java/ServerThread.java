@@ -42,7 +42,7 @@ public class ServerThread extends Thread{
             int requestId = request.getRequestId();
 
             // Check the Request's action to know if we need one worker or all
-            if (request.getAction().equals("Show Owned Rooms") || request.getAction().equals("Add Room Availability Date")){
+            if (request.getAction().equals("Show Owned Rooms") || request.getAction().equals("Add Room Availability Date") || request.getAction().equals("Search Room")){
 
                 // Send the Request to all workers
                 for (WorkerInfo workerInfo : Master.getWorkerSockets()) {

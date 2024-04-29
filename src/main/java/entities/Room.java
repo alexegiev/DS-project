@@ -17,17 +17,38 @@ public class Room implements Serializable {
     private String area;
     private double rating;
     private int numberOfReviews;
+    private int capacity;
+    private float price;
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
     private String roomImage;
     private Map<Date, Date> availableDates = new HashMap<>(); //key is the start date, value is the end date
 
     // Constructor
-    public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews, String roomImage) {
+    public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews,int capacity, int price, String roomImage) {
         this.roomName = roomName;
         this.roomId = roomId;
         this.managerUsername = managerUsername;
         this.area = area;
         this.rating = rating;
         this.numberOfReviews = numberOfReviews;
+        this.capacity = capacity;
+        this.price = price;
         this.roomImage = roomImage;
     }
 

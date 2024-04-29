@@ -54,11 +54,8 @@ public class ClientThread extends Thread{
         } catch (SocketException se) {
             System.err.println("Socket was closed unexpectedly!");
 
-        } catch (IOException ioException) {
+        } catch (IOException | ClassNotFoundException ioException) {
             ioException.printStackTrace();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
 
         } finally {
             try {
