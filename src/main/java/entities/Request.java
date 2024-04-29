@@ -9,6 +9,8 @@ public class Request implements Serializable{
     String username;
     int requestId;
     String action;
+    String filterType;
+    String filterValue;
     Room room;
 
     public Request() {
@@ -43,6 +45,22 @@ public class Request implements Serializable{
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(String filterType) {
+        this.filterType = filterType;
+    }
+
+    public String getFilterValue() {
+        return filterValue;
+    }
+
+    public void setFilterValue(String filterValue) {
+        this.filterValue = filterValue;
     }
 
     public Room getRoom() {

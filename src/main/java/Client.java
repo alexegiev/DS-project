@@ -176,6 +176,7 @@ public class Client{
 
                     // Create new Scanner object
                     Scanner select = new Scanner(System.in);
+
                     System.out.println("Use filter: " +
                             "\n1. Room Name" +
                             "\n2. Room Area" +
@@ -196,6 +197,59 @@ public class Client{
                         filter = select.nextInt();
                     }
 
+                    // Check filterType and ask for the desired filterValue
+                    String filterType = "";
+                    String filterValue = "";
+
+                    switch (filter) {
+                        case 1:
+                            filterType = "Room Name";
+                            System.out.print("Enter Room Name: ");
+                            filterValue = select.next();
+                            break;
+                        case 2:
+                            filterType = "Room Area";
+                            System.out.print("Enter Room Area: ");
+                            filterValue = select.next();
+                            break;
+                        case 3:
+                            filterType = "Availability Dates";
+                            System.out.print("Enter From Date (yyyy-MM-dd): ");
+                            String fromDate = select.next();
+                            System.out.print("Enter To Date (yyyy-MM-dd): ");
+                            String toDate = select.next();
+                            filterValue = fromDate + " - " + toDate;
+                            break;
+                        case 4:
+                            filterType = "People capacity";
+                            System.out.print("Enter People capacity: ");
+                            filterValue = select.next();
+                            break;
+                        case 5:
+                            filterType = "Price";
+                            System.out.print("Enter Price: ");
+                            filterValue = select.next();
+                            break;
+                        case 6:
+                            filterType = "Rating";
+                            System.out.print("Enter Rating: ");
+                            filterValue = select.next();
+                            break;
+                    }
+
+                    // Create a new Request object with the given parameters
+                    Request request = new Request("Search Room");
+                    request.setFilterType(filterType);
+                    request.setFilterValue(filterValue);
+
+                    // Increase the requestId
+                    requestId++;
+
+                    // Add the requestId to the request object
+                    request.setRequestId(requestId);
+
+                    // Create a new ClientThread object with the given request
+                    ClientThread clientThread = new ClientThread(request);
                     break;
                 case 2:
                     // Book Room
@@ -228,7 +282,5 @@ public class Client{
             renterActions(username);
         }
 
-        //TESTING
-        //new Client(new Request(1,new Room("room1",1,1,"area1",1.5,5, "asdasdas"))).start();
     }
 }
