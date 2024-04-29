@@ -6,6 +6,8 @@
     "area": "area1",
     "rating": 1.5,
     "numberOfReviews": 5,
+    "capacity": 5,
+    "price": 100,
     "roomImage": "image1.jpg"
   },
   {
@@ -15,6 +17,8 @@
     "area": "area2",
     "rating": 2.5,
     "numberOfReviews": 10,
+    "capacity": 3,
+    "price": 35,
     "roomImage": "image2.jpg"
   },
   {
@@ -24,6 +28,8 @@
     "area": "area3",
     "rating": 3.5,
     "numberOfReviews": 15,
+    "capacity": 1,
+    "price": 10,
     "roomImage": "image3.jpg"
   }
 ]

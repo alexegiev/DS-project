@@ -35,6 +35,8 @@ public class Parser {
                     jsonObject.getString("area"),
                     jsonObject.getJsonNumber("rating").doubleValue(),
                     jsonObject.getInt("numberOfReviews"),
+                    jsonObject.getInt("capacity"),
+                    jsonObject.getInt("price"),
                     jsonObject.getString("roomImage")
             );
             rooms.add(room);
