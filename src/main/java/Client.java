@@ -160,11 +160,6 @@ public class Client{
         ClientThread clientThread = new ClientThread(request);
         clientThread.start();
         System.out.println("Logged out successfully.");
-        try {
-            clientThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private static void renterActions(String username) {
