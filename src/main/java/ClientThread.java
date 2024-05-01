@@ -7,13 +7,20 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class ClientThread extends Thread{
 
     Request request;
+    ArrayList<Integer> requestIds;
 
     ClientThread(Request request) {
         this.request = request;
+    }
+
+    ClientThread(Request request, ArrayList<Integer> requestIds) {
+        this.request = request;
+        this.requestIds = requestIds;
     }
 
     public void run() {
@@ -46,7 +53,6 @@ public class ClientThread extends Thread{
             else if(response.getAction().equals("Add Room")) {
                 System.out.println("Response: " + response.getResponse());
             }
-
 
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");

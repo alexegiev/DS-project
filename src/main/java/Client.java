@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -14,7 +15,7 @@ public class Client{
     // List of Managers and Renters of the systems
     static List<String> managers = Arrays.asList("manager1", "manager2", "manager3");
     static List<String> renters = Arrays.asList("renter1", "renter2", "renter3");
-    static int requestId = 1;
+    static int requestId = 0;
 
     private String login(){
 
@@ -91,6 +92,7 @@ public class Client{
                     // For each room, create a ClientThread object which will handle the request
                     for (Room room : rooms) {
                         requestId++;
+                        manager.addRequestId(requestId);
                         clientThread = new ClientThread(new Request(requestId, "Add Room", room));
                         clientThread.start();
                     }
@@ -123,7 +125,7 @@ public class Client{
 
                     // Increase the requestId
                     requestId++;
-
+                    manager.addRequestId(requestId);
                     // Create a new Request object with the given parameters
                     Request requestToUpdate = new Request(requestId, "Add Room Availability Date", roomToUpdate);
 
@@ -135,7 +137,7 @@ public class Client{
                     // Show Owned Rooms
                     Request request = manager.showOwnedRooms(username);
                     requestId++;
-
+                    manager.addRequestId(requestId);
                     // Add the requestId to the request object
                     request.setRequestId(requestId);
 
@@ -152,7 +154,17 @@ public class Client{
             }
             choice = action.nextInt();
         }
+        // Send a request to the Master to close the connection
+        Request request = new Request("Logout");
+        request.setRequestIds(manager.getRequestIds());
+        ClientThread clientThread = new ClientThread(request);
+        clientThread.start();
         System.out.println("Logged out successfully.");
+        try {
+            clientThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void renterActions(String username) {

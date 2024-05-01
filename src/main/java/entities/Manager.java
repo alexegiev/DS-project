@@ -7,16 +7,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manager extends Thread {
     private Room room;
     private String managerUsername;
+    ArrayList<Integer> requestIds;
     private static final String MASTER_HOST = "localhost";
     private static final int MASTER_PORT = 9090;
 
     public Manager(String managerUsername) {
         this.managerUsername = managerUsername;
+        this.requestIds = new ArrayList<>(); // Initialize the ArrayList
     }
 
     public String getManagerUsername() {
@@ -25,6 +28,18 @@ public class Manager extends Thread {
 
     public void setManagerUsername(String managerUsername) {
         this.managerUsername = managerUsername;
+    }
+
+    public ArrayList<Integer> getRequestIds() {
+        return requestIds;
+    }
+
+    public void setRequestIds(ArrayList<Integer> requestIds) {
+        this.requestIds = requestIds;
+    }
+
+    public void addRequestId(int requestId) {
+        this.requestIds.add(requestId);
     }
 
     public List<Room> addRoomsFromJson(String username) {

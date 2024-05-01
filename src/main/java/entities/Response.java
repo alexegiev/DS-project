@@ -8,6 +8,7 @@ public class Response implements Serializable {
 
     String response;
     String action;
+    int requestId;
     String filterType;
     String filterValue;
     List<Room> rooms = new ArrayList<>();
@@ -55,6 +56,14 @@ public class Response implements Serializable {
 
     public void setFilterValue(String filterValue) {
         this.filterValue = filterValue;
+    }
+
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
     }
 
     public synchronized void setRooms(List<Room> rooms) {

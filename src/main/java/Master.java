@@ -1,3 +1,5 @@
+import entities.ClientInfo;
+import entities.Request;
 import entities.WorkerInfo;
 import tools.Mapper;
 
@@ -39,6 +41,7 @@ public class Master {
 
     // List that contains all connected Workers
     public static ArrayList<WorkerInfo> workers = new ArrayList<>();
+    public static ArrayList<ClientInfo> clients = new ArrayList<>();
 
     // Mapper object
     static Mapper mapper = null;

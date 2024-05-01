@@ -47,6 +47,7 @@ public class WorkerThread extends Thread{
             // Check Request.Action and perform the appropriate action
             String message;
             Response response = new Response();
+            response.setRequestId(request.getRequestId());
 
             if(request.getAction().equals("Add Room")){
 

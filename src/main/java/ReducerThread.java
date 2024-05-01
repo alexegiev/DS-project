@@ -44,6 +44,8 @@ public class ReducerThread extends Thread {
     private void handleSearchRoom(Response responseFromWorker) {
         // Set the action of the syncResponse
         Reducer.syncResponse.setAction("Search Room");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
         // Set the filter type
         Reducer.syncResponse.setFilterType(responseFromWorker.getFilterType());
         // Set the filter value
@@ -62,6 +64,8 @@ public class ReducerThread extends Thread {
 
         // Set the action of the syncResponse
         Reducer.syncResponse.setAction("Add Room");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
         // Check if the response is successful
         if (responseFromWorker.getResponse().equals("Room(s) added")) {
             // Set the response to the Reducer syncResponse
@@ -79,6 +83,8 @@ public class ReducerThread extends Thread {
 
         // Set the action of the syncResponse
         Reducer.syncResponse.setAction("Add Room Availability Date");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
         // Check if the response is successful
         if (responseFromWorker.getResponse().equals("Room availability date added")) {
             // Set the response to the Reducer syncResponse
@@ -95,6 +101,8 @@ public class ReducerThread extends Thread {
 
         // Set the action of the syncResponse
         Reducer.syncResponse.setAction("Show Owned Rooms");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
         // Add the rooms to the syncResponse
         Reducer.syncResponse.addRoomList(responseFromWorker.getRooms());
         System.out.println("Rooms owned by Manager: " + Reducer.syncResponse.getRoomsString());

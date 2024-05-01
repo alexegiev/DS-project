@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Request implements Serializable{
 
@@ -8,6 +9,7 @@ public class Request implements Serializable{
 
     String username;
     int requestId;
+    ArrayList<Integer> requestIds;
     String action;
     String filterType;
     String filterValue;
@@ -33,6 +35,18 @@ public class Request implements Serializable{
 
     public int getRequestId() {
         return requestId;
+    }
+
+    public ArrayList<Integer> getRequestIds() {
+        return requestIds;
+    }
+
+    public void addRequestId(int requestId) {
+        this.requestIds.add(requestId);
+    }
+
+    public void setRequestIds(ArrayList<Integer> requestIds) {
+        this.requestIds = requestIds;
     }
 
     public void setRequestId(int requestId) {

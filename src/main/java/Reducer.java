@@ -83,7 +83,7 @@ public class Reducer {
     public static void sendResponse(){
 
         try {
-            System.out.println("Sending response to Master");
+            System.out.println("Sending response to Master for responseId: " + syncResponse.getRequestId());
             System.out.println("SyncResponse: " + syncResponse.getResponse());
             // Connect to Master CHANGE "localhost" to Master's IP address
             Socket masterSocket = new Socket("localhost", 9093);
