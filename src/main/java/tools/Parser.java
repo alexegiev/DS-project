@@ -9,8 +9,10 @@ import javax.json.JsonValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class Parser {
 
     public JsonArray readJsonFile(String filePath) {
@@ -24,9 +26,24 @@ public class Parser {
 
     public List<Room> parseJsonArray(JsonArray jsonArray) {
         List<Room> rooms = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // Adjust this to match your date format
 
         for (JsonValue jsonValue : jsonArray) {
             JsonObject jsonObject = jsonValue.asJsonObject();
+
+            // Parse the availableDates key
+            JsonObject availableDatesJson = jsonObject.getJsonObject("availableDates");
+            Map<Date, Date> availableDates = new HashMap<>();
+            for (String key : availableDatesJson.keySet()) {
+                try {
+                    Date keyDate = format.parse(key);
+                    Date valueDate = format.parse(availableDatesJson.getString(key));
+                    availableDates.put(keyDate, valueDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
             // Assuming Room has a constructor that accepts all necessary parameters
             Room room = new Room(
                     jsonObject.getString("roomName"),
@@ -37,7 +54,8 @@ public class Parser {
                     jsonObject.getInt("numberOfReviews"),
                     jsonObject.getInt("capacity"),
                     jsonObject.getInt("price"),
-                    jsonObject.getString("roomImage")
+                    jsonObject.getString("roomImage"),
+                    availableDates  // Add the availableDates map to the Room constructor
             );
             rooms.add(room);
         }

@@ -19,6 +19,21 @@ public class Client{
 
     private String login(){
 
+        // Create a new ClientThread object
+        ClientThread clientThread = null;
+
+        Manager dummyManager = new Manager("dummyManager");
+        // Get Manager's Rooms from JSON
+        List<Room> rooms = dummyManager.addRoomsFromJson("preLoadedRooms");
+
+        // For each room, create a ClientThread object which will handle the request
+        for (Room room : rooms) {
+            requestId++;
+            dummyManager.addRequestId(requestId);
+            clientThread = new ClientThread(new Request(requestId, "Add Room", room));
+            clientThread.start();
+        }
+
         // ask Client if is Manager or Renter
         System.out.println("Are you a Manager or a Renter? (1: Manager, 2: Renter)");
 
@@ -228,12 +243,12 @@ public class Client{
                             filterValue = fromDate + " - " + toDate;
                             break;
                         case 4:
-                            filterType = "People capacity";
+                            filterType = "People Capacity";
                             System.out.print("Enter People capacity: ");
                             filterValue = select.next();
                             break;
                         case 5:
-                            filterType = "Price";
+                            filterType = "Room Price";
                             System.out.print("Enter Price: ");
                             filterValue = select.next();
                             break;

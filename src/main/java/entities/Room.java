@@ -21,7 +21,7 @@ public class Room implements Serializable {
     private float price;
 
     public int getCapacity() {
-        return capacity;
+        return this.capacity;
     }
 
     public void setCapacity(int capacity) {
@@ -50,6 +50,20 @@ public class Room implements Serializable {
         this.capacity = capacity;
         this.price = price;
         this.roomImage = roomImage;
+    }
+
+    // Constructor
+    public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews,int capacity, int price, String roomImage, Map<Date, Date> availableDates) {
+        this.roomName = roomName;
+        this.roomId = roomId;
+        this.managerUsername = managerUsername;
+        this.area = area;
+        this.rating = rating;
+        this.numberOfReviews = numberOfReviews;
+        this.capacity = capacity;
+        this.price = price;
+        this.roomImage = roomImage;
+        this.availableDates = availableDates;
     }
 
     public Room(){
@@ -115,7 +129,7 @@ public class Room implements Serializable {
     }
 
     public Map<Date, Date> getAvailableDates() {
-        return availableDates;
+        return this.availableDates;
     }
 
     public void addAvailableDates(Date startDate, Date endDate) {

@@ -179,13 +179,6 @@ public class WorkerThread extends Thread{
                     // Create a list of Rooms to send to Reducer
                     List<Room> responseRooms = new ArrayList<>();
 
-                    // Set the filter type
-                    response.setFilterType(request.getFilterType());
-
-                    // Set the filter value
-                    response.setFilterValue(request.getFilterValue());
-
-                    // Check for the Request.filterType for the Search filter
                     if (request.getFilterType().equals("Room Name")){
                         for (Room room : rooms) {
                             // check if in this Room the roomName is the same as the Request's roomName
@@ -195,9 +188,46 @@ public class WorkerThread extends Thread{
                             }
                         }
                     }
-                    else if (request.getFilterType().equals("Room Capacity")){
+                    else if (request.getFilterType().equals("Room Area")){
+                        for (Room room : rooms) {
+                            // check if in this Room the roomLocation is the same as the Request's roomArea
+                            if (room.getArea().equals(request.getFilterValue())) {
+                                responseRooms.add(room);
+                                System.out.println("Room added to response");
+                            }
+                        }
+                    }
+                    else if (request.getFilterType().equals("Availability Dates")){
+                        for (Room room : rooms) {
+                            // check if in this Room the roomAvailabilityDate is the same as the Request.filterValue
+
+                            // Parse the filterValue to Date
+                            String filterDate = request.getFilterValue();
+                            String[] dates = filterDate.split(" - ");
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                            Date startDate = format.parse(dates[0]);
+                            Date endDate = format.parse(dates[1]);
+
+                            // Find the room that has the filterDate in the available dates
+                            if (filterDate != null) {
+                                for (Map.Entry<Date, Date> entry : room.getAvailableDates().entrySet()) {
+                                    Date startDateRoom = entry.getKey();
+                                    Date endDateRoom = entry.getValue();
+                                    if (startDateRoom.equals(startDate) && endDateRoom.equals(endDate)) {
+                                        // filterDate is equal to the startDate and  endDate
+                                        System.out.println("Date matches with available dates");
+                                        responseRooms.add(room);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (request.getFilterType().equals("People Capacity")){
                         for (Room room : rooms) {
                             // check if in this Room the roomCapacity is the same as the Request's roomCapacity
+                            System.out.println(room.getCapacity() + " " + Integer.parseInt(request.getFilterValue()));
                             if (room.getCapacity() == Integer.parseInt(request.getFilterValue())) {
                                 responseRooms.add(room);
                                 System.out.println("Room added to response");
@@ -213,33 +243,22 @@ public class WorkerThread extends Thread{
                             }
                         }
                     }
-                    else if (request.getFilterType().equals("Room Availability Date")){
+                    else if (request.getFilterType().equals("Rating")){
                         for (Room room : rooms) {
-                            // check if in this Room the roomAvailabilityDate is the same as the Request.filterValue
-
-                            // Parse the filterValue to Date
-                            Date filterDate = null;
-                            try {
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                filterDate = format.parse(request.getFilterValue());
-                            } catch (ParseException e) {
-                                System.out.println("Invalid date format. Please enter a date in the format yyyy-MM-dd.");
-                            }
-
-                            // Find the room that has the filterDate in the available dates
-                            if (filterDate != null) {
-                                for (Map.Entry<Date, Date> entry : room.getAvailableDates().entrySet()) {
-                                    Date startDate = entry.getKey();
-                                    Date endDate = entry.getValue();
-                                    if (filterDate.equals(startDate) && filterDate.equals(endDate)) {
-                                        // filterDate is equal to the startDate and  endDate
-                                        System.out.println("Date matches with available dates");
-                                        break;
-                                    }
-                                }
+                            // check if in this Room the roomLocation is the same as the Request's roomLocation
+                            if (room.getRating() == Float.parseFloat(request.getFilterValue())){
+                                responseRooms.add(room);
+                                System.out.println("Room added to response");
                             }
                         }
                     }
+                    // Set the filter type
+                    response.setFilterType(request.getFilterType());
+
+                    // Set the filter value
+                    response.setFilterValue(request.getFilterValue());
+
+                    // Check for the Request.filterType for the Search filter
                     // Check if responseRooms is empty and set up the appropriate response
                     if (responseRooms.isEmpty()) {
                         System.out.println("No rooms found on this Worker Instance");
