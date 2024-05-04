@@ -46,7 +46,7 @@ public class ServerThread extends Thread{
             System.out.println("Client's Request ID: " + requestId + " connected ");
 
             // Check the Request's action to know if we need one worker or all
-            if (request.getAction().equals("Show Owned Rooms") || request.getAction().equals("Add Room Availability Date") || request.getAction().equals("Search Room")){
+            if (request.getAction().equals("Show Owned Rooms") || request.getAction().equals("Add Room Availability Date") || request.getAction().equals("Search Room") || request.getAction().equals("Book Room") || request.getAction().equals("Add Rating")) {
 
                 // Send the Request to all workers
                 for (WorkerInfo workerInfo : Master.getWorkerSockets()) {

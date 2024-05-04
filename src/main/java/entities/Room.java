@@ -13,12 +13,16 @@ public class Room implements Serializable {
     // Fields
     private String roomName;
     private int roomId;
+    private Date from;
+    private Date to;
     private String managerUsername;
+    private String renterUsername;
     private String area;
     private double rating;
     private int numberOfReviews;
     private int capacity;
     private float price;
+    private double ratingToAdd;
 
     public int getCapacity() {
         return this.capacity;
@@ -34,6 +38,38 @@ public class Room implements Serializable {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public double getRatingToAdd() {
+        return ratingToAdd;
+    }
+
+    public void setRatingToAdd(double ratingToAdd) {
+        this.ratingToAdd = ratingToAdd;
+    }
+
+    public Date getFrom() {
+        return from;
+    }
+
+    public void setFrom(Date from) {
+        this.from = from;
+    }
+
+    public Date getTo() {
+        return to;
+    }
+
+    public void setTo(Date to) {
+        this.to = to;
+    }
+
+    public String getRenterUsername() {
+        return renterUsername;
+    }
+
+    public void setRenterUsername(String renterUsername) {
+        this.renterUsername = renterUsername;
     }
 
     private String roomImage;
@@ -139,7 +175,6 @@ public class Room implements Serializable {
     public void insertAvailableDates(Map<Date, Date> dates) {
         this.availableDates.putAll(dates);
     }
-
 
     public void reserveDates(Date startDate, Date endDate) {
         this.availableDates.remove(startDate, endDate);

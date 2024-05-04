@@ -187,7 +187,7 @@ public class Client{
             System.out.println("Choose available actions: " +
                     "\n1. Search Room" +
                     "\n2. Book Room" +
-                    "\n3. Show Booked Rooms" +
+                    "\n3. Add Rating" +
                     "\n4. Logout");
 
             //TODO: Implement the actions
@@ -276,9 +276,70 @@ public class Client{
                     break;
                 case 2:
                     // Book Room
+
+                    // Create new Scanner object
+                    Scanner selectRoom = new Scanner(System.in);
+
+                    // Get Room Name from Renter
+                    System.out.println("Enter Room Name: ");
+                    String roomName = selectRoom.next();
+
+                    // Get from Renter the From date and parse it to a Date object
+                    System.out.println("Enter From Date (yyyy-MM-dd): ");
+                    String fromDate = selectRoom.next();
+                    Date from = Date.valueOf(fromDate);
+
+                    // Get from Renter the To date and parse it to a Date object
+                    System.out.println("Enter To Date (yyyy-MM-dd): ");
+                    String toDate = selectRoom.next();
+                    Date to = Date.valueOf(toDate);
+
+                    // Create a new Room object with the given parameters
+                    Room roomToBook = new Room();
+                    roomToBook.setRoomName(roomName);
+                    roomToBook.setFrom(from);
+                    roomToBook.setTo(to);
+                    roomToBook.setRenterUsername(username);
+
+                    // Increase the requestId
+                    requestId++;
+
+                    // Create a new Request object with the given parameters
+                    Request requestToBook = new Request(requestId, "Book Room", roomToBook);
+
+                    // Create a new ClientThread object with the given request
+                    ClientThread clientThreadToBook = new ClientThread(requestToBook);
+                    clientThreadToBook.start();
                     break;
                 case 3:
-                    // Show Booked Rooms
+                    // Add Rating
+
+                    // Create new Scanner object
+                    Scanner selectRating = new Scanner(System.in);
+
+                    // Get Room Name from Renter
+                    System.out.println("Enter Room Name: ");
+                    String roomNameRating = selectRating.next();
+
+                    // Get Rating from Renter
+                    System.out.println("Enter Rating: ");
+                    double rating = selectRating.nextDouble();
+
+                    // Create a new Room object with the given parameters
+                    Room roomToAddRating = new Room();
+                    roomToAddRating.setRoomName(roomNameRating);
+                    roomToAddRating.setRatingToAdd(rating);
+
+                    // Increase the requestId
+                    requestId++;
+
+                    // Create a new Request object with the given parameters
+                    Request requestToAddRating = new Request(requestId, "Add Rating", roomToAddRating);
+
+                    // Create a new ClientThread object with the given request
+                    ClientThread clientThreadToAddRating = new ClientThread(requestToAddRating);
+                    clientThreadToAddRating.start();
+
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid choice.");

@@ -34,6 +34,8 @@ public class ReducerThread extends Thread {
                     case "Add Room Availability Date" -> handleUpdateAvailabilityDate(responseFromWorker);
                     case "Show Owned Rooms" -> handleShowOwnedRooms(responseFromWorker);
                     case "Search Room" -> handleSearchRoom(responseFromWorker);
+                    case "Book Room" -> handleBookRoom(responseFromWorker);
+                    case "Add Rating" -> handleRatingRoom(responseFromWorker);
                 }
             }
         } catch (Exception e) {
@@ -41,7 +43,29 @@ public class ReducerThread extends Thread {
         }
     }
 
-    private void handleSearchRoom(Response responseFromWorker) {
+    private synchronized void handleRatingRoom(Response responseFromWorker) {
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Add Rating");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
+        // Set the response
+        Reducer.syncResponse.setResponse(responseFromWorker.getResponse());
+        // Reduce the activeWorkers count
+        Reducer.reduceActiveWorkers();
+    }
+
+    private synchronized void handleBookRoom(Response responseFromWorker){
+        // Set the action of the syncResponse
+        Reducer.syncResponse.setAction("Book Room");
+        // Set the requestId
+        Reducer.syncResponse.setRequestId(responseFromWorker.getRequestId());
+        // Set the response
+        Reducer.syncResponse.setResponse(responseFromWorker.getResponse());
+        // Reduce the activeWorkers count
+        Reducer.reduceActiveWorkers();
+    }
+
+    private synchronized void handleSearchRoom(Response responseFromWorker) {
         // Set the action of the syncResponse
         Reducer.syncResponse.setAction("Search Room");
         // Set the requestId
