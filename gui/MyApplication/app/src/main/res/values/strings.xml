@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string-array name="filter_options">
+        <item>Filter by:</item>
+        <item>Area</item>
+        <item>Dates</item>
+        <item>Capacity/People count</item>
+        <item>Price</item>
+        <item>Room Name</item>
+        <item>Rating</item>
+
+        <!-- Add more filter options here -->
+    </string-array>
+</resources>

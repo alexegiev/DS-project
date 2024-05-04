@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/header_color">
+
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="48dp"
+        android:layout_height="46dp"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/hello"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Welcome to 'Let Them Book!'" />
+
+
+</LinearLayout>
