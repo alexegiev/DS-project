@@ -1,6 +1,6 @@
-package tools;
+package com.example.myapplication.backend.tools;
 
-import entities.Room;
+import com.example.myapplication.backend.entities.Room;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;

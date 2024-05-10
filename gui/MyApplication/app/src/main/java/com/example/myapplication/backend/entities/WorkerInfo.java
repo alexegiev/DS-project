@@ -1,4 +1,4 @@
-package entities;
+package com.example.myapplication.backend.entities;
 
 import java.net.InetAddress;
 

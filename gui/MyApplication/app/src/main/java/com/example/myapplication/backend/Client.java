@@ -1,12 +1,14 @@
+package com.example.myapplication.backend;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import entities.Manager;
-import entities.Request;
-import entities.Room;
+import com.example.myapplication.backend.entities.Manager;
+import com.example.myapplication.backend.entities.Request;
+import com.example.myapplication.backend.entities.Room;
 
 public class Client{
 

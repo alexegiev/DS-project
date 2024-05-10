@@ -1,5 +1,7 @@
-import entities.Response;
-import entities.Room;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.Response;
+import com.example.myapplication.backend.entities.Room;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

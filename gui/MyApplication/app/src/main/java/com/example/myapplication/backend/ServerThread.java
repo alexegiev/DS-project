@@ -1,5 +1,7 @@
-import entities.*;
-import tools.Mapper;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.*;
+import com.example.myapplication.backend.tools.Mapper;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

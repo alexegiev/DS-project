@@ -1,6 +1,7 @@
-import entities.Request;
-import entities.Response;
-import entities.Room;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.Response;
+import com.example.myapplication.backend.entities.Room;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -29,13 +30,18 @@ public class ReducerThread extends Thread {
                 Response responseFromWorker = (Response) in.readObject();
                 System.out.println("Response from worker: " + responseFromWorker);
 
-                switch (responseFromWorker.getAction()) {
-                    case "Add Room" -> handleAddRoom(responseFromWorker);
-                    case "Add Room Availability Date" -> handleUpdateAvailabilityDate(responseFromWorker);
-                    case "Show Owned Rooms" -> handleShowOwnedRooms(responseFromWorker);
-                    case "Search Room" -> handleSearchRoom(responseFromWorker);
-                    case "Book Room" -> handleBookRoom(responseFromWorker);
-                    case "Add Rating" -> handleRatingRoom(responseFromWorker);
+                if (responseFromWorker.getAction().equals("Add Room")) {
+                    handleAddRoom(responseFromWorker);
+                } else if (responseFromWorker.getAction().equals("Add Room Availability Date")) {
+                    handleUpdateAvailabilityDate(responseFromWorker);
+                } else if (responseFromWorker.getAction().equals("Show Owned Rooms")) {
+                    handleShowOwnedRooms(responseFromWorker);
+                } else if (responseFromWorker.getAction().equals("Search Room")) {
+                    handleSearchRoom(responseFromWorker);
+                } else if (responseFromWorker.getAction().equals("Book Room")) {
+                    handleBookRoom(responseFromWorker);
+                } else if (responseFromWorker.getAction().equals("Add Rating")) {
+                    handleRatingRoom(responseFromWorker);
                 }
             }
         } catch (Exception e) {

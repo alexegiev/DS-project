@@ -1,4 +1,4 @@
-package tools;
+package com.example.myapplication.backend.tools;
 /*
 * Purpose of Mapper is to:
 *   Be called each time a client request is made

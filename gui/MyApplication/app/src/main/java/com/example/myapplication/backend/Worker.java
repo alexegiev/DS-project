@@ -1,4 +1,6 @@
-import entities.Room;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.Room;
 
 import java.io.*;
 import java.net.*;

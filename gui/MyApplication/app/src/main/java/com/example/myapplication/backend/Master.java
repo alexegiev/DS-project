@@ -1,7 +1,9 @@
-import entities.ClientInfo;
-import entities.Request;
-import entities.WorkerInfo;
-import tools.Mapper;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.ClientInfo;
+import com.example.myapplication.backend.entities.Request;
+import com.example.myapplication.backend.entities.WorkerInfo;
+import com.example.myapplication.backend.tools.Mapper;
 
 import java.io.*;
 import java.net.*;

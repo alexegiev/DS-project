@@ -1,6 +1,8 @@
-import entities.Request;
-import entities.Response;
-import entities.Room;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.Request;
+import com.example.myapplication.backend.entities.Response;
+import com.example.myapplication.backend.entities.Room;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

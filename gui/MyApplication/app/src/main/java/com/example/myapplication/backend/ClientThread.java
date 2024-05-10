@@ -1,5 +1,7 @@
-import entities.Request;
-import entities.Response;
+package com.example.myapplication.backend;
+
+import com.example.myapplication.backend.entities.Request;
+import com.example.myapplication.backend.entities.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
