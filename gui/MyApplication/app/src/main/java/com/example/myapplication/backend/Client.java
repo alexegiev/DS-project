@@ -85,100 +85,6 @@ public class Client{
         return username;
     }
 
-    private static void managerActions(String username) {
-
-        Manager manager = new Manager(username);
-        // show available actions for manager
-        System.out.println("Choose available actions: " +
-                "\n1. Add Room" +
-                "\n2. Add Room Availability Date" +
-                "\n3. Show Owned Rooms" +
-                "\n4. Logout");
-
-        //TODO: Implement the actions
-        Scanner action = new Scanner(System.in);
-        int choice = action.nextInt();
-        while (choice != 4) {
-            ClientThread clientThread = null;
-
-            switch (choice) {
-                case 1:
-                    // Get Manager's Rooms from JSON
-                    List<Room> rooms = manager.addRoomsFromJson(username);
-
-                    // For each room, create a ClientThread object which will handle the request
-                    for (Room room : rooms) {
-                        requestId++;
-                        manager.addRequestId(requestId);
-                        clientThread = new ClientThread(new Request(requestId, "Add Room", room));
-                        clientThread.start();
-                    }
-                    break;
-
-                case 2:
-                    // Add Room Availability Date
-
-                    // Create new Scanner
-                    Scanner select = new Scanner(System.in);
-                    // Get Room Name from Manager
-                    System.out.println("Enter Room Name: ");
-                    String roomName = select.next();
-
-                    // Get from Manager the From date and parse it to a Date object
-                    System.out.println("Enter From Date (yyyy-MM-dd): ");
-                    String fromDate = select.next();
-                    Date from = Date.valueOf(fromDate);
-
-                    // Get from Manager the To date and parse it to a Date object
-                    System.out.println("Enter To Date (yyyy-MM-dd): ");
-                    String toDate = select.next();
-                    Date to = Date.valueOf(toDate);
-
-                    // Create a new Room object with the given parameters
-                    Room roomToUpdate = new Room();
-                    roomToUpdate.setRoomName(roomName);
-                    roomToUpdate.addAvailableDates(from, to);
-                    roomToUpdate.setManagerUsername(username);
-
-                    // Increase the requestId
-                    requestId++;
-                    manager.addRequestId(requestId);
-                    // Create a new Request object with the given parameters
-                    Request requestToUpdate = new Request(requestId, "Add Room Availability Date", roomToUpdate);
-
-                    clientThread = new ClientThread(requestToUpdate);
-                    clientThread.start();
-                    break;
-
-                case 3:
-                    // Show Owned Rooms
-                    Request request = manager.showOwnedRooms(username);
-                    requestId++;
-                    manager.addRequestId(requestId);
-                    // Add the requestId to the request object
-                    request.setRequestId(requestId);
-
-                    // Set the request Action
-                    request.setAction("Show Owned Rooms");
-
-                    clientThread = new ClientThread(request);
-                    clientThread.start();
-                    break;
-
-                default:
-                    System.out.println("Invalid choice. Please enter a valid choice.");
-                    break;
-            }
-            choice = action.nextInt();
-        }
-        // Send a request to the Master to close the connection
-        Request request = new Request("Logout");
-        request.setRequestIds(manager.getRequestIds());
-        ClientThread clientThread = new ClientThread(request);
-        clientThread.start();
-        System.out.println("Logged out successfully.");
-    }
-
     private static void renterActions(String username) {
 
         Scanner action = new Scanner(System.in);
@@ -352,7 +258,99 @@ public class Client{
         System.out.println("Logged out successfully.");
     }
 
+    private static void managerActions(String username) {
 
+        Manager manager = new Manager(username);
+        // show available actions for manager
+        System.out.println("Choose available actions: " +
+                "\n1. Add Room" +
+                "\n2. Add Room Availability Date" +
+                "\n3. Show Owned Rooms" +
+                "\n4. Logout");
+
+        //TODO: Implement the actions
+        Scanner action = new Scanner(System.in);
+        int choice = action.nextInt();
+        while (choice != 4) {
+            ClientThread clientThread = null;
+
+            switch (choice) {
+                case 1:
+                    // Get Manager's Rooms from JSON
+                    List<Room> rooms = manager.addRoomsFromJson(username);
+
+                    // For each room, create a ClientThread object which will handle the request
+                    for (Room room : rooms) {
+                        requestId++;
+                        manager.addRequestId(requestId);
+                        clientThread = new ClientThread(new Request(requestId, "Add Room", room));
+                        clientThread.start();
+                    }
+                    break;
+
+                case 2:
+                    // Add Room Availability Date
+
+                    // Create new Scanner
+                    Scanner select = new Scanner(System.in);
+                    // Get Room Name from Manager
+                    System.out.println("Enter Room Name: ");
+                    String roomName = select.next();
+
+                    // Get from Manager the From date and parse it to a Date object
+                    System.out.println("Enter From Date (yyyy-MM-dd): ");
+                    String fromDate = select.next();
+                    Date from = Date.valueOf(fromDate);
+
+                    // Get from Manager the To date and parse it to a Date object
+                    System.out.println("Enter To Date (yyyy-MM-dd): ");
+                    String toDate = select.next();
+                    Date to = Date.valueOf(toDate);
+
+                    // Create a new Room object with the given parameters
+                    Room roomToUpdate = new Room();
+                    roomToUpdate.setRoomName(roomName);
+                    roomToUpdate.addAvailableDates(from, to);
+                    roomToUpdate.setManagerUsername(username);
+
+                    // Increase the requestId
+                    requestId++;
+                    manager.addRequestId(requestId);
+                    // Create a new Request object with the given parameters
+                    Request requestToUpdate = new Request(requestId, "Add Room Availability Date", roomToUpdate);
+
+                    clientThread = new ClientThread(requestToUpdate);
+                    clientThread.start();
+                    break;
+
+                case 3:
+                    // Show Owned Rooms
+                    Request request = manager.showOwnedRooms(username);
+                    requestId++;
+                    manager.addRequestId(requestId);
+                    // Add the requestId to the request object
+                    request.setRequestId(requestId);
+
+                    // Set the request Action
+                    request.setAction("Show Owned Rooms");
+
+                    clientThread = new ClientThread(request);
+                    clientThread.start();
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please enter a valid choice.");
+                    break;
+            }
+            choice = action.nextInt();
+        }
+        // Send a request to the Master to close the connection
+        Request request = new Request("Logout");
+        request.setRequestIds(manager.getRequestIds());
+        ClientThread clientThread = new ClientThread(request);
+        clientThread.start();
+        System.out.println("Logged out successfully.");
+    }
 
     public static void main(String args[]){
 

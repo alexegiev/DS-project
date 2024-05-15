@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.myapplication.backend.Client;
 
 public class MainActivity extends AppCompatActivity {
+
+    Client client;
 
     EditText editText;
 
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editText = (EditText) findViewById(R.id.Username);
+        //TODO: Add setters/getters for the Client (username)
+        //TODO: Add function with logic that returns statements to validate in the frontend
         btn = (Button) findViewById(R.id.btn);
 
 
