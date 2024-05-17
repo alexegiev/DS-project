@@ -12,7 +12,7 @@ import com.example.myapplication.backend.Client;
 
 public class MainActivity extends AppCompatActivity {
 
-    Client client;
+    Client client = new Client();
 
     EditText editText;
 
@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editText = (EditText) findViewById(R.id.Username);
-        //TODO: Add setters/getters for the Client (username)
-        //TODO: Add function with logic that returns statements to validate in the frontend
         btn = (Button) findViewById(R.id.btn);
 
 
@@ -33,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String text = editText.getText().toString();
-//                Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getApplicationContext(),ImageActivity.class);
-                i.putExtra("text",text);
-                startActivity(i);
+                if (client.validate("Renter", text)){
+                    System.out.println("Valid username: " + text);
+                    Intent i = new Intent(getApplicationContext(),ImageActivity.class);
+                    i.putExtra("text",text);
+                    startActivity(i);
+                }
+                else{
+                    System.out.println("Invalid username: " + text);
+                    Toast.makeText(MainActivity.this, "Invalid username, please try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

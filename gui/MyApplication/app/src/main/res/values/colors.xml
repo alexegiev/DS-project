@@ -5,4 +5,5 @@
     <color name="my_light_primary">#61B7D8</color>
     <color name="header_color">#76c8e6</color>
     <color name="background">#C7E3EC</color>
+    <color name="fontColor">#FFFFFF</color>
 </resources>

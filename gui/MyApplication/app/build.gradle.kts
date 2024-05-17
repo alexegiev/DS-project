@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    id("com.android.application") version "8.2.2" // specify the AGP version here
 }
 
 android {

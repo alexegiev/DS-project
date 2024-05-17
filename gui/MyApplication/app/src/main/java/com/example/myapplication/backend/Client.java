@@ -19,22 +19,30 @@ public class Client{
     static List<String> renters = Arrays.asList("renter1", "renter2", "renter3");
     static int requestId = 0;
 
+    static boolean roomsInitialized = false;
+
+    public Client() {
+//        if (!roomsInitialized) {
+//            roomsInitialized = true;
+//
+//            // Create a new ClientThread object
+//            ClientThread clientThread = null;
+//
+//            Manager dummyManager = new Manager("dummyManager");
+//            // Get Manager's Rooms from JSON
+//            List<Room> rooms = dummyManager.addRoomsFromJson("preLoadedRooms");
+//
+//            // For each room, create a ClientThread object which will handle the request
+//            for (Room room : rooms) {
+//                requestId++;
+//                dummyManager.addRequestId(requestId);
+//                clientThread = new ClientThread(new Request(requestId, "Add Room", room));
+//                clientThread.start();
+//            }
+//        }
+    }
+
     private String login(){
-
-        // Create a new ClientThread object
-        ClientThread clientThread = null;
-
-        Manager dummyManager = new Manager("dummyManager");
-        // Get Manager's Rooms from JSON
-        List<Room> rooms = dummyManager.addRoomsFromJson("preLoadedRooms");
-
-        // For each room, create a ClientThread object which will handle the request
-        for (Room room : rooms) {
-            requestId++;
-            dummyManager.addRequestId(requestId);
-            clientThread = new ClientThread(new Request(requestId, "Add Room", room));
-            clientThread.start();
-        }
 
         // ask Client if is Manager or Renter
         System.out.println("Are you a Manager or a Renter? (1: Manager, 2: Renter)");
@@ -55,34 +63,24 @@ public class Client{
         }
     }
 
-    private String validate(String role){
-        String username;
+    public boolean validate(String role, String username){
         Scanner scanner = new Scanner(System.in);
         if (role.equals("Manager")) {
-            System.out.println("Enter Manager Username: ");
-            username = scanner.next();
-            while(true) {
-                if (managers.contains(username)) {
-                    System.out.println("Welcome " + username + " !");
-                    break;
-                }
-                System.out.println("Invalid username. Please enter a valid username.");
-                username = scanner.next();
+            if (managers.contains(username)) {
+                System.out.println("Welcome " + username + " !");
+                return true;
             }
+            System.out.println("Invalid username. Please enter a valid username.");
+            return false;
         }
         else {
-            System.out.println("Enter Renter Username: ");
-            username = scanner.next();
-            while(true) {
-                if (renters.contains(username)) {
-                    System.out.println("Welcome " + username + " !");
-                    break;
-                }
-                System.out.println("Invalid username. Please enter a valid username.");
-                username = scanner.next();
+            if (renters.contains(username)) {
+                System.out.println("Welcome " + username + " !");
+                return true;
             }
+            System.out.println("Invalid username. Please enter a valid username.");
+            return false;
         }
-        return username;
     }
 
     private static void renterActions(String username) {
@@ -98,7 +96,6 @@ public class Client{
                     "\n3. Add Rating" +
                     "\n4. Logout");
 
-            //TODO: Implement the actions
             choice = action.nextInt();
             switch (choice) {
                 case 1:
@@ -352,19 +349,19 @@ public class Client{
         System.out.println("Logged out successfully.");
     }
 
-    public static void main(String args[]){
-
-        //Login
-        Client client = new Client();
-        String role = client.login();
-        String username = client.validate(role);
-
-        // check client's role and call the appropriate method
-        if (role.equals("Manager")) {
-            managerActions(username);
-        } else {
-            renterActions(username);
-        }
-
-    }
+//    public static void main(String args[]){
+//
+//        //Login
+//        Client client = new Client();
+//        String role = client.login();
+//        String username = client.validate(role);
+//
+//        // check client's role and call the appropriate method
+//        if (role.equals("Manager")) {
+//            managerActions(username);
+//        } else {
+//            renterActions(username);
+//        }
+//
+//    }
 }
