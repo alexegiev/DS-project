@@ -19,6 +19,8 @@ public class Client{
     static List<String> renters = Arrays.asList("renter1", "renter2", "renter3");
     static int requestId = 0;
 
+    private Request request;
+
     static boolean roomsInitialized = false;
 
     public Client() {
@@ -81,6 +83,21 @@ public class Client{
             System.out.println("Invalid username. Please enter a valid username.");
             return false;
         }
+    }
+    public void addRequsetId(int requestId){
+        this.requestId = requestId;
+    }
+
+    public void addRequestAction(String action){
+        this.request.setAction(action);
+    }
+
+    public void addRequestFilterType(String filterType){
+        this.request.setFilterType(filterType);
+    }
+
+    public void addRequestFilterValue(String filterValue){
+        this.request.setFilterValue(filterValue);
     }
 
     private static void renterActions(String username) {
