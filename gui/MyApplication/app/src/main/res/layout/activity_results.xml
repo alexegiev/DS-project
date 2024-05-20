@@ -18,6 +18,14 @@
         android:layout_gravity="center"
         android:textAlignment="center" />
 
+    <TextView
+        android:id="@+id/results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:textAlignment="center" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

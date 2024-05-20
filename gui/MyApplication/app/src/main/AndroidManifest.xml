@@ -17,9 +17,7 @@
         <activity
             android:name=".ResultsActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
+
         <activity
             android:name=".ImageActivity"
             android:exported="false" />
@@ -32,9 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ResultsActivity"
-            android:exported="false"/>
+
     </application>
 
 </manifest>

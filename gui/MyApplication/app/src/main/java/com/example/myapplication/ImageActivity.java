@@ -19,6 +19,14 @@ import java.util.Locale;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
+import com.example.myapplication.backend.Client;
+import com.example.myapplication.backend.ClientThread;
+import com.example.myapplication.backend.entities.Request;
+import com.example.myapplication.backend.entities.Response;
+import com.example.myapplication.backend.entities.Room;
+import java.util.List;
+
+
 
 
 public class ImageActivity extends AppCompatActivity {
@@ -27,6 +35,8 @@ public class ImageActivity extends AppCompatActivity {
     TextView userInput;
     Button searchButton, clearButton;
     String startDate, endDate;
+
+    Client client = new Client();
 
     private void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
@@ -74,58 +84,32 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String filter = parent.getItemAtPosition(position).toString();
-                switch (filter) {
-                    case "Area":
-                        //handle the area filter
-                        userInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                        userInput.setOnClickListener(null); // Remove the OnClickListener
 
-                        startDate = null;
-                        endDate = null;
-                        break;
-                    case "Dates":
-                        userInput.setInputType(InputType.TYPE_NULL); // Remove the keyboard
-                        userInput.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showDatePickerDialog();
-                            }
-                        });
-                        break;
-                    case "Capacity/People count":
-                        //handle the capacity/people count filter
-                        userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        userInput.setOnClickListener(null); // Remove the OnClickListener
-                        startDate = null;
-                        endDate = null;
-                        break;
-                    case "Price":
-                        //handle the price filter
-                        userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        userInput.setOnClickListener(null); // Remove the OnClickListener
-                        startDate = null;
-                        endDate = null;
-                        break;
-                    case "Room Name":
-                        //handle the room name filter
-                        userInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                        userInput.setOnClickListener(null); // Remove the OnClickListener
-                        startDate = null;
-                        endDate = null;
-                        break;
-                    case "Rating":
-                        //handle the rating filter
-                        userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        userInput.setOnClickListener(null); // Remove the OnClickListener
-                        startDate = null;
-                        endDate = null;
-                        break;
+                if (filter.equals("Area")|| filter.equals("Room Name")) {  // handle the case when the filter is Area or Room Name
+                    userInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                    userInput.setOnClickListener(null);
+                    startDate = null;
+                    endDate = null;
+                } else if (filter.equals("Dates")) { //handle the case when the filter is Dates because we need to show the date picker dialog
+                    userInput.setInputType(InputType.TYPE_NULL);
+                    userInput.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDatePickerDialog();
+                        }
+                    });
+                } else if (filter.equals("Capacity/People count") ||filter.equals("Price")||filter.equals("Rating")) { // handle the case when the filter is Capacity/People count,
+                    userInput.setInputType(InputType.TYPE_CLASS_NUMBER);                                               // Price or Rating
+                    userInput.setOnClickListener(null);
+                    startDate = null;
+                    endDate = null;
                 }
         }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Handle no spinner filter selected here
+                searchButton.setEnabled(false);
+                Toast.makeText(ImageActivity.this, "You cannot search without choosing a filter!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -135,14 +119,35 @@ public class ImageActivity extends AppCompatActivity {
                 String filter = spinner.getSelectedItem().toString();
                 String userInputText = userInput.getText().toString();
 
-                if ("Dates".equals(filter)) {
-                    // Split the user input by the "-" character
+                if (userInputText.isEmpty()) {
+                    Toast.makeText(ImageActivity.this, "Please enter some input before searching.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Create a new Request object
+                Request request = new Request();
+
+                // Set the Request object in the Client
+                client.setRequest(request);
+
+                // Now you can add the filter type and value to the Request
+                client.addRequestFilterType(filter);
+                client.addRequestFilterValue(userInputText);
+
+
+
+                // Check the filter type and perform the search
+                if (filter.equals("Area") || filter.equals("Room Name")) {
+                    String in = userInput.getText().toString();
+                    if (in.isEmpty()) {
+                        Toast.makeText(ImageActivity.this, "Please provide input before searching.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if (filter.equals("Dates")) {// Split the user input by the "-" character
                     String[] dates = userInputText.split(" - ");
                     if (dates.length != 2) {
                         Toast.makeText(ImageActivity.this, "Invalid date range. Please use dd/MM/yyyy - dd/MM/yyyy.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     // Parse the user input as dates
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
                     try {
@@ -159,20 +164,44 @@ public class ImageActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         Toast.makeText(ImageActivity.this, "Invalid date format. Please use dd/MM/yyyy - dd/MM/yyyy.", Toast.LENGTH_SHORT).show();
                     }
-                } else if ("Room Name".equals(filter)) {
-                    // Use the room number to perform the search
-                    // ...
+                }
+                else if (filter.equals("Capacity/People count") || filter.equals("Price") || filter.equals("Rating")) {
+                    int value = Integer.parseInt(userInputText);
+                    if (value <= 0) {
+                        Toast.makeText(ImageActivity.this, "Please enter a value greater than 0.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
-                // Create an Intent to start ResultsActivity
-                Intent intent = new Intent(ImageActivity.this, ResultsActivity.class);
 
-                // If you want to pass data to ResultsActivity, you can put it as extra
-                // For example, if you want to pass the user input text
-                intent.putExtra("userInput", userInput.getText().toString());
 
-                // Start the ResultsActivity
-                startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Response response = client.searchRoom(filter, userInputText);
+
+                        // Use runOnUiThread to update the UI on the main thread
+
+                       runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               Intent intent = new Intent(ImageActivity.this, ResultsActivity.class);
+                               intent.putExtra("userInput", userInput.getText().toString());
+                               intent.putExtra("response", response);
+                               System.out.println("Response in Image activity: " + response);
+
+
+                               // Start the ResultsActivity
+                               startActivity(intent);
+                           }
+                       });
+
+
+
+                    }
+                }).start();
+
+
             }
 
         });

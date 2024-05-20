@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class ClientThread extends Thread{
 
     Request request;
+    Response response;
+    Client client = new Client();
     ArrayList<Integer> requestIds;
 
-    ClientThread(Request request) {
+    public ClientThread(Request request) {
         this.request = request;
     }
 
@@ -24,6 +26,7 @@ public class ClientThread extends Thread{
         this.request = request;
         this.requestIds = requestIds;
     }
+
 
     public void run() {
 
@@ -45,12 +48,13 @@ public class ClientThread extends Thread{
             out.writeObject(request);
             out.flush();
 
-            // Wait and receive data from Master
-            Response response = (Response) in.readObject();
+            this.response = (Response) in.readObject();
 
             //print the received results (from Request.toString())
             if(response.getAction().equals("Show Owned Rooms") || response.getAction().equals("Add Room Availability Date") || response.getAction().equals("Search Room")) {
                 System.out.println(response.getResponse());
+                System.out.println(response.getRooms());
+                System.out.println("you are in the client thread trying to get the rooms");
             }
             else if(response.getAction().equals("Add Room")) {
                 System.out.println("Response: " + response.getResponse());
@@ -80,5 +84,20 @@ public class ClientThread extends Thread{
                 ioException.printStackTrace();
             }
         }
+    }
+
+    public Response getRooms() {
+        // Create a new Request object
+        Request request = new Request();
+        request.setAction("Get Rooms");
+
+        // Set the Request object in the Client
+        client.setRequest(request);
+
+        // Run the ClientThread to send the request and receive the response
+        this.run();
+
+        // Return the received response
+        return response;
     }
 }
