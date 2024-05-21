@@ -120,7 +120,7 @@ public class ImageActivity extends AppCompatActivity {
                 String userInputText = userInput.getText().toString();
 
                 if (userInputText.isEmpty()) {
-                    Toast.makeText(ImageActivity.this, "Please enter some input before searching.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ImageActivity.this, "Please enter some input before searchingblouuuuuuu.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Create a new Request object
@@ -137,9 +137,10 @@ public class ImageActivity extends AppCompatActivity {
 
                 // Check the filter type and perform the search
                 if (filter.equals("Area") || filter.equals("Room Name")) {
+                    Toast.makeText(ImageActivity.this, "Searching for " + filter + " with value: " + userInputText, Toast.LENGTH_SHORT).show();
                     String in = userInput.getText().toString();
                     if (in.isEmpty()) {
-                        Toast.makeText(ImageActivity.this, "Please provide input before searching.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ImageActivity.this, "Please provide input before searching.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else if (filter.equals("Dates")) {// Split the user input by the "-" character

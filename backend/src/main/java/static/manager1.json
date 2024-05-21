@@ -1,0 +1,35 @@
+[
+  {
+    "roomName": "room1",
+    "roomId": 1,
+    "managerUsername": "manager1",
+    "area": "area1",
+    "rating": 1.5,
+    "numberOfReviews": 5,
+    "capacity": 5,
+    "price": 100,
+    "roomImage": "image1.jpg"
+  },
+  {
+    "roomName": "room2",
+    "roomId": 2,
+    "managerUsername": "manager1",
+    "area": "area2",
+    "rating": 2.5,
+    "numberOfReviews": 10,
+    "capacity": 3,
+    "price": 35,
+    "roomImage": "image2.jpg"
+  },
+  {
+    "roomName": "room3",
+    "roomId": 3,
+    "managerUsername": "manager1",
+    "area": "area3",
+    "rating": 3.5,
+    "numberOfReviews": 15,
+    "capacity": 1,
+    "price": 10,
+    "roomImage": "image3.jpg"
+  }
+]

@@ -1,21 +1,14 @@
 package com.example.myapplication.backend;
 
-import android.widget.Toast;
-
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
-
-import com.example.myapplication.ImageActivity;
 import com.example.myapplication.backend.entities.Manager;
 import com.example.myapplication.backend.entities.Request;
 import com.example.myapplication.backend.entities.Response;
 import com.example.myapplication.backend.entities.Room;
+
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Client{
