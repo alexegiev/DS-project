@@ -120,29 +120,27 @@ public class ImageActivity extends AppCompatActivity {
                 String userInputText = userInput.getText().toString();
 
                 if (userInputText.isEmpty()) {
-                    Toast.makeText(ImageActivity.this, "Please enter some input before searchingblouuuuuuu.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ImageActivity.this, "Please enter some input before searching.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Create a new Request object
                 Request request = new Request();
-
+                request.setFilterType(filter);
+                request.setFilterValue(userInputText);
                 // Set the Request object in the Client
                 client.setRequest(request);
 
                 // Now you can add the filter type and value to the Request
                 client.addRequestFilterType(filter);
                 client.addRequestFilterValue(userInputText);
-
+                System.out.println("User input textview: " + userInput);
+                System.out.println("User input string: " + userInputText);
 
 
                 // Check the filter type and perform the search
                 if (filter.equals("Area") || filter.equals("Room Name")) {
                     Toast.makeText(ImageActivity.this, "Searching for " + filter + " with value: " + userInputText, Toast.LENGTH_SHORT).show();
-                    String in = userInput.getText().toString();
-                    if (in.isEmpty()) {
-                        //Toast.makeText(ImageActivity.this, "Please provide input before searching.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+
                 } else if (filter.equals("Dates")) {// Split the user input by the "-" character
                     String[] dates = userInputText.split(" - ");
                     if (dates.length != 2) {
@@ -167,10 +165,14 @@ public class ImageActivity extends AppCompatActivity {
                     }
                 }
                 else if (filter.equals("Capacity/People count") || filter.equals("Price") || filter.equals("Rating")) {
-                    int value = Integer.parseInt(userInputText);
-                    if (value <= 0) {
-                        Toast.makeText(ImageActivity.this, "Please enter a value greater than 0.", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (userInputText.matches("\\d+")) {
+                        int userInputInt = Integer.parseInt(userInputText);
+                        if(userInputInt < 0){
+                            Toast.makeText(ImageActivity.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else {
+                        Toast.makeText(ImageActivity.this, "Invalid number format", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -187,7 +189,6 @@ public class ImageActivity extends AppCompatActivity {
                            @Override
                            public void run() {
                                Intent intent = new Intent(ImageActivity.this, ResultsActivity.class);
-                               intent.putExtra("userInput", userInput.getText().toString());
                                intent.putExtra("response", response);
                                System.out.println("Response in Image activity: " + response);
 
