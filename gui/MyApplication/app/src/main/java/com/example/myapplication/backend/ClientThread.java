@@ -38,7 +38,7 @@ public class ClientThread extends Thread{
         try {
 
             // create a socket to connect to the server on port 9090
-            requestSocket = new Socket("localhost", 9090);
+            requestSocket = new Socket("192.168.2.1", 9090);
 
             // create the streams to send and receive data from server
             out = new ObjectOutputStream(requestSocket.getOutputStream());
