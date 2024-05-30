@@ -127,6 +127,7 @@ public class ImageActivity extends AppCompatActivity {
                 Request request = new Request();
                 request.setFilterType(filter);
                 request.setFilterValue(userInputText);
+                System.out.println(filter + userInputText);
                 // Set the Request object in the Client
                 client.setRequest(request);
 
