@@ -19,11 +19,8 @@ import java.util.Locale;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
-import com.example.myapplication.backend.Client;
-import com.example.myapplication.backend.ClientThread;
-import com.example.myapplication.backend.entities.Request;
-import com.example.myapplication.backend.entities.Response;
-import com.example.myapplication.backend.entities.Room;
+import com.example.myapplication.backend.*;
+import com.example.myapplication.backend.entities.*;
 import java.util.List;
 
 
@@ -125,15 +122,13 @@ public class ImageActivity extends AppCompatActivity {
                 }
                 // Create a new Request object
                 Request request = new Request();
+                request.setAction("Search Room");
                 request.setFilterType(filter);
                 request.setFilterValue(userInputText);
                 System.out.println(filter + userInputText);
                 // Set the Request object in the Client
                 client.setRequest(request);
 
-                // Now you can add the filter type and value to the Request
-                client.addRequestFilterType(filter);
-                client.addRequestFilterValue(userInputText);
                 System.out.println("User input textview: " + userInput);
                 System.out.println("User input string: " + userInputText);
 

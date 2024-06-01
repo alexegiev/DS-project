@@ -1,9 +1,6 @@
 package com.example.myapplication.backend;
 
-import com.example.myapplication.backend.entities.Manager;
-import com.example.myapplication.backend.entities.Request;
-import com.example.myapplication.backend.entities.Response;
-import com.example.myapplication.backend.entities.Room;
+import com.example.myapplication.backend.entities.*;
 
 import java.sql.Date;
 import java.util.Arrays;

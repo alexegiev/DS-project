@@ -1,6 +1,6 @@
 package com.example.myapplication.backend.entities;
 
-import com.example.myapplication.backend.tools.Parser;
+import com.example.myapplication.backend.tools.*;
 
 import javax.json.JsonArray;
 import java.io.IOException;
