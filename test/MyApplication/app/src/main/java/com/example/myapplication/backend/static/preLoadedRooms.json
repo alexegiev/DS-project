@@ -1,0 +1,77 @@
+[
+  {
+    "roomName": "room100",
+    "roomId": 100,
+    "managerUsername": "manager1",
+    "area": "area100",
+    "rating": 4.5,
+    "numberOfReviews": 20,
+    "capacity": 2,
+    "price": 20,
+    "roomImage": "image100.jpg",
+    "availableDates": {
+      "2022-01-01": "2022-01-31",
+      "2022-02-01": "2022-02-28"
+    }
+  },
+  {
+    "roomName": "room101",
+    "roomId": 101,
+    "managerUsername": "manager1",
+    "area": "area100",
+    "rating": 5.0,
+    "numberOfReviews": 25,
+    "capacity": 3,
+    "price": 30,
+    "roomImage": "image101.jpg",
+    "availableDates": {
+      "2022-01-01": "2022-01-31",
+      "2022-02-01": "2022-02-28"
+    }
+  },
+  {
+    "roomName": "room102",
+    "roomId": 102,
+    "managerUsername": "manager1",
+    "area": "area100",
+    "rating": 2.0,
+    "numberOfReviews": 10,
+    "capacity": 4,
+    "price": 40,
+    "roomImage": "image102.jpg",
+    "availableDates": {
+      "2022-01-01": "2022-01-31",
+      "2022-02-01": "2022-02-28"
+    }
+  },
+  {
+    "roomName": "room103",
+    "roomId": 103,
+    "managerUsername": "manager1",
+    "area": "area100",
+    "rating": 3.0,
+    "numberOfReviews": 15,
+    "capacity": 5,
+    "price": 50,
+    "roomImage": "image103.jpg",
+    "availableDates": {
+      "2022-01-01": "2022-01-31",
+      "2022-02-01": "2022-02-28"
+    }
+  },
+  {
+    "roomName": "room104",
+    "roomId": 104,
+    "managerUsername": "manager1",
+    "area": "area100",
+    "rating": 4.0,
+    "numberOfReviews": 20,
+    "capacity": 6,
+    "price": 60,
+    "roomImage": "image104.jpg",
+    "availableDates": {
+      "2022-01-01": "2022-01-31",
+      "2022-02-01": "2022-02-28"
+    }
+  }
+]
