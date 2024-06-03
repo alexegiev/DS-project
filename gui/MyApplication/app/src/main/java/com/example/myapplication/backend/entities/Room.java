@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
-* This entity represents a room in the system.
-*/
+ * This entity represents a room in the system.
+ */
 
 public class Room implements Serializable {
 
@@ -23,6 +23,7 @@ public class Room implements Serializable {
     private int capacity;
     private float price;
     private double ratingToAdd;
+    private byte[] roomImageBytes;
 
     public int getCapacity() {
         return this.capacity;
@@ -102,6 +103,20 @@ public class Room implements Serializable {
         this.availableDates = availableDates;
     }
 
+    // Constructor
+    public Room(String roomName, int roomId, String managerUsername, String area, double rating, int numberOfReviews,int capacity, int price, byte[] roomImageBytes, Map<Date, Date> availableDates) {
+        this.roomName = roomName;
+        this.roomId = roomId;
+        this.managerUsername = managerUsername;
+        this.area = area;
+        this.rating = rating;
+        this.numberOfReviews = numberOfReviews;
+        this.capacity = capacity;
+        this.price = price;
+        this.roomImageBytes = roomImageBytes;
+        this.availableDates = availableDates;
+    }
+
     public Room(){
 
     }
@@ -156,8 +171,8 @@ public class Room implements Serializable {
         this.numberOfReviews = numberOfReviews;
     }
 
-    public String getRoomImage() {
-        return roomImage;
+    public byte[] getRoomImage() {
+        return roomImageBytes;
     }
 
     public void setRoomImage(String roomImage) {

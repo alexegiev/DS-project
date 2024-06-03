@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +49,9 @@ public class ResultsActivity extends AppCompatActivity {
                 // Create a new CardView
                 CardView cardView = new CardView(this);
 
+                // Create a new ImageView for the room image
+                ImageView imageView = new ImageView(this);
+
                 // Set the CardView attributes
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, // Width
@@ -57,6 +63,15 @@ public class ResultsActivity extends AppCompatActivity {
                 cardView.setCardElevation(8); // Elevation
                 cardView.setContentPadding(16, 16, 16, 16); // Padding
 
+                // Check if the room image bytes is not null
+                if (room.getRoomImage() != null) {
+                    // Decode the byte array into a Bitmap
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(room.getRoomImage(), 0, room.getRoomImage().length);
+
+                    // Set the Bitmap to the ImageView
+                    imageView.setImageBitmap(bitmap);
+                }
+
                 // Create a new TextView for the room
                 TextView textView = new TextView(this);
 
@@ -64,7 +79,6 @@ public class ResultsActivity extends AppCompatActivity {
                         "Area: " + room.getArea() + "\n" +
                         "Rating: " + room.getRating() + "\n" +
                         "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
-                        "Image: " + room.getRoomImage() + "\n" +
                         "Capacity: " + room.getCapacity() + "\n" +
                         "Price: " + room.getPrice() + "\n" +
                         "Available from: " + room.getFrom() + "\n" +
@@ -75,6 +89,9 @@ public class ResultsActivity extends AppCompatActivity {
 
                 // Add the TextView to the CardView
                 cardView.addView(textView);
+
+                // Add the ImageView to the CardView
+                cardView.addView(imageView);
 
                 // Add the CardView to the LinearLayout
                 resultsContainer.addView(cardView);

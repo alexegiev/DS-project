@@ -8,7 +8,7 @@
     "numberOfReviews": 20,
     "capacity": 2,
     "price": 20,
-    "roomImage": "image100.jpg",
+    "roomImage": "room100.jpg",
     "availableDates": {
       "2022-01-01": "2022-01-31",
       "2022-02-01": "2022-02-28"
@@ -23,7 +23,7 @@
     "numberOfReviews": 25,
     "capacity": 3,
     "price": 30,
-    "roomImage": "image101.jpg",
+    "roomImage": "room101.jpg",
     "availableDates": {
       "2022-01-01": "2022-01-31",
       "2022-02-01": "2022-02-28"
@@ -38,7 +38,7 @@
     "numberOfReviews": 10,
     "capacity": 4,
     "price": 40,
-    "roomImage": "image102.jpg",
+    "roomImage": "room102.jpg",
     "availableDates": {
       "2022-01-01": "2022-01-31",
       "2022-02-01": "2022-02-28"
@@ -53,7 +53,7 @@
     "numberOfReviews": 15,
     "capacity": 5,
     "price": 50,
-    "roomImage": "image103.jpg",
+    "roomImage": "room103.jpg",
     "availableDates": {
       "2022-01-01": "2022-01-31",
       "2022-02-01": "2022-02-28"
@@ -68,7 +68,7 @@
     "numberOfReviews": 20,
     "capacity": 6,
     "price": 60,
-    "roomImage": "image104.jpg",
+    "roomImage": "room104.jpg",
     "availableDates": {
       "2022-01-01": "2022-01-31",
       "2022-02-01": "2022-02-28"
