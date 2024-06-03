@@ -150,10 +150,7 @@ public class ImageActivity extends AppCompatActivity {
                         Date date2 = dateFormat.parse(dates[1]);
 
                         // Check if the second date is after the first date
-                        if (date2.after(date1)) {
-                            // Use the dates to perform the search
-                            // ...
-                        } else {
+                        if (date1.after(date2)) {
                             Toast.makeText(ImageActivity.this, "The second date should be after the first date.", Toast.LENGTH_SHORT).show();
                         }
                     } catch (ParseException e) {
