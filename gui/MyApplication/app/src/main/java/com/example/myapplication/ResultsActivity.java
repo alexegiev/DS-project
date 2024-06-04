@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class ResultsActivity extends AppCompatActivity {
                 CardView cardView = new CardView(this);
 
                 // Create a new ImageView for the room image
-                ImageView imageView = new ImageView(this);
+
 
                 // Set the CardView attributes
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -62,6 +63,41 @@ public class ResultsActivity extends AppCompatActivity {
                 cardView.setRadius(16); // Corner radius
                 cardView.setCardElevation(8); // Elevation
                 cardView.setContentPadding(16, 16, 16, 16); // Padding
+                cardView.setCardBackgroundColor(getResources().getColor(R.color.results_containers_color));
+
+
+                // Create a new RelativeLayout for the room details
+                RelativeLayout roomDetailsLayout = new RelativeLayout(this);
+                RelativeLayout.LayoutParams roomDetailsLayoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, // Width
+                        RelativeLayout.LayoutParams.WRAP_CONTENT  // Height
+                );
+                roomDetailsLayout.setLayoutParams(roomDetailsLayoutParams);
+                // Create a new TextView for the room
+                TextView textView = new TextView(this);
+
+                String roomDetails = room.getRoomName() + "\n" +
+                        "Area: " + room.getArea() + "\n" +
+                        "Rating: " + room.getRating() + "\n" +
+                        "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
+                        "Capacity: " + room.getCapacity() + " people" + "\n" +
+                        "Price: " + room.getPrice() + " €" + "\n" +
+                        "Available from: " + room.getFrom() + "\n" +
+                        "Available to: " + room.getTo() + "\n" +
+                        "available dates: " + room.getAvailableDates() + "\n";
+                textView.setText(roomDetails);
+                textView.setTextSize(16);
+
+                roomDetailsLayout.addView(textView);
+                ImageView imageView = new ImageView(this);
+                // Set the ImageView layout parameters
+                RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
+                        400,  // Width in pixels
+                        400   // Height in pixels
+                );
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP); // Align to the top of the parent
+                imageView.setLayoutParams(imageParams);
 
                 // Check if the room image bytes is not null
                 if (room.getRoomImage() != null) {
@@ -71,27 +107,9 @@ public class ResultsActivity extends AppCompatActivity {
                     // Set the Bitmap to the ImageView
                     imageView.setImageBitmap(bitmap);
                 }
+                roomDetailsLayout.addView(imageView);
+                cardView.addView(roomDetailsLayout);
 
-                // Create a new TextView for the room
-                TextView textView = new TextView(this);
-
-                String roomDetails = "Room Name: " + room.getRoomName() + "\n" +
-                        "Area: " + room.getArea() + "\n" +
-                        "Rating: " + room.getRating() + "\n" +
-                        "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
-                        "Capacity: " + room.getCapacity() + "\n" +
-                        "Price: " + room.getPrice() + "\n" +
-                        "Available from: " + room.getFrom() + "\n" +
-                        "Available to: " + room.getTo() + "\n" +
-                        "available dates: " + room.getAvailableDates() + "\n";
-                textView.setText(roomDetails);
-                textView.setTextSize(16);
-
-                // Add the TextView to the CardView
-                cardView.addView(textView);
-
-                // Add the ImageView to the CardView
-                cardView.addView(imageView);
 
                 // Add the CardView to the LinearLayout
                 resultsContainer.addView(cardView);

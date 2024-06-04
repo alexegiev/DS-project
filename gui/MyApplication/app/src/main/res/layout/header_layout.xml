@@ -22,7 +22,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Welcome to 'Let Them Book!'" />
+        android:text="Let Them Book!" />
 
 
 </LinearLayout>

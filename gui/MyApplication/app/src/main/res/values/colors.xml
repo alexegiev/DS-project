@@ -6,4 +6,5 @@
     <color name="header_color">#76c8e6</color>
     <color name="background">#C7E3EC</color>
     <color name="fontColor">#FFFFFF</color>
+    <color name="results_containers_color">#9DD6EC</color>
 </resources>
