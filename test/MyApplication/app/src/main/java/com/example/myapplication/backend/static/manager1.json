@@ -8,7 +8,11 @@
     "numberOfReviews": 5,
     "capacity": 5,
     "price": 100,
-    "roomImage": "image1.jpg"
+    "roomImage": "image1.jpg",
+    "availableDates": {
+      "01/01/2022": "31/01/2022",
+      "01/02/2022": "28/02/2022"
+    }
   },
   {
     "roomName": "room2",
@@ -19,7 +23,11 @@
     "numberOfReviews": 10,
     "capacity": 3,
     "price": 35,
-    "roomImage": "image2.jpg"
+    "roomImage": "image2.jpg",
+    "availableDates": {
+      "01/01/2022": "31/01/2022",
+      "01/02/2022": "28/02/2022"
+    }
   },
   {
     "roomName": "room3",
@@ -30,6 +38,10 @@
     "numberOfReviews": 15,
     "capacity": 1,
     "price": 10,
-    "roomImage": "image3.jpg"
+    "roomImage": "image3.jpg",
+    "availableDates": {
+      "01/01/2022": "31/01/2022",
+      "01/02/2022": "28/02/2022"
+    }
   }
 ]

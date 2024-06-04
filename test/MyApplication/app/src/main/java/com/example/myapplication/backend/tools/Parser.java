@@ -39,7 +39,7 @@ public class Parser {
 
     public List<Room> parseJsonArray(JsonArray jsonArray) {
         List<Room> rooms = new ArrayList<>();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // Adjust this to match your date format
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy"); // Adjusted to match your date format
 
         for (JsonValue jsonValue : jsonArray) {
             JsonObject jsonObject = jsonValue.asJsonObject();

@@ -209,7 +209,7 @@ public class WorkerThread extends Thread{
                             // Parse the filterValue to Date
                             String filterDate = request.getFilterValue();
                             String[] dates = filterDate.split(" - ");
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
                             Date startDate = format.parse(dates[0]);
                             Date endDate = format.parse(dates[1]);
