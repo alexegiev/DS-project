@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BookingActivity"
+    android:background="@color/background">
+
+    <include layout="@layout/header_layout"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chosen_room"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif-medium"/>
+
+    <ImageView
+        android:id="@+id/room_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"/>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

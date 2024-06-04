@@ -14,9 +14,8 @@ import com.example.myapplication.backend.entities.Response;
 import com.example.myapplication.backend.entities.Room;
 import java.util.List;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.view.ViewGroup;
-import java.util.Date;
+
+import android.widget.Button;
 
 public class ResultsActivity extends AppCompatActivity {
     String results;
@@ -47,11 +46,8 @@ public class ResultsActivity extends AppCompatActivity {
         if (rooms != null) {
             // Loop through the list of rooms and create a CardView for each room
             for (Room room : rooms) {
-                // Create a new CardView
+                // Create a new CardView to display each room
                 CardView cardView = new CardView(this);
-
-                // Create a new ImageView for the room image
-
 
                 // Set the CardView attributes
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -73,9 +69,28 @@ public class ResultsActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams.WRAP_CONTENT  // Height
                 );
                 roomDetailsLayout.setLayoutParams(roomDetailsLayoutParams);
+
+                // Create a new Button for booking the room
+                Button button = new Button(this);
+                button.setText("Book Now");
+
+                // Set the Button layout parameters
+                RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
+                        RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
+                );
+                buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM); // Align to the bottom of the parent
+                buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL); // Center horizontally
+                buttonParams.topMargin = 16; // Top margin
+                button.setBackgroundColor(getResources().getColor(R.color.header_color));
+                button.setTextColor(getResources().getColor(R.color.white));
+
+                button.setLayoutParams(buttonParams);
+
                 // Create a new TextView for the room
                 TextView textView = new TextView(this);
 
+                // Set the TextView text that will appear in the CardView
                 String roomDetails = room.getRoomName() + "\n" +
                         "Area: " + room.getArea() + "\n" +
                         "Rating: " + room.getRating() + "\n" +
@@ -89,6 +104,9 @@ public class ResultsActivity extends AppCompatActivity {
                 textView.setTextSize(16);
 
                 roomDetailsLayout.addView(textView);
+                roomDetailsLayout.addView(button);
+
+
                 ImageView imageView = new ImageView(this);
                 // Set the ImageView layout parameters
                 RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
@@ -107,11 +125,21 @@ public class ResultsActivity extends AppCompatActivity {
                     // Set the Bitmap to the ImageView
                     imageView.setImageBitmap(bitmap);
                 }
+
                 roomDetailsLayout.addView(imageView);
                 cardView.addView(roomDetailsLayout);
 
-
-                // Add the CardView to the LinearLayout
+                //adding the on click listener to go to the booking activity page
+                button.setOnClickListener(v -> {
+                    // Create a new Intent to start the BookingActivity
+                    Intent intent = new Intent(ResultsActivity.this, BookingActivity.class);
+                    // Pass the room object to the BookingActivity
+                    intent.putExtra("room", room);
+                    intent.putExtra("room_details", roomDetails);
+                    intent.putExtra("image", room.getRoomImage());
+                    // Start the BookingActivity
+                    startActivity(intent);
+                });
                 resultsContainer.addView(cardView);
             }
         } else {
