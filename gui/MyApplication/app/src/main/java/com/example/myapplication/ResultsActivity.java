@@ -14,8 +14,13 @@ import com.example.myapplication.backend.entities.Response;
 import com.example.myapplication.backend.entities.Room;
 import java.util.List;
 import android.widget.LinearLayout;
-
 import android.widget.Button;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.text.ParseException;
+import java.util.Map;
+
 
 public class ResultsActivity extends AppCompatActivity {
     String results;
@@ -52,7 +57,7 @@ public class ResultsActivity extends AppCompatActivity {
                 // Set the CardView attributes
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, // Width
-                        LinearLayout.LayoutParams.WRAP_CONTENT  // Height
+                        LinearLayout.LayoutParams.MATCH_PARENT  // Height
                 );
                 layoutParams.setMargins(0, 0, 0, 16); // Bottom margin
                 cardView.setLayoutParams(layoutParams);
@@ -68,11 +73,16 @@ public class ResultsActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams.MATCH_PARENT, // Width
                         RelativeLayout.LayoutParams.WRAP_CONTENT  // Height
                 );
+
                 roomDetailsLayout.setLayoutParams(roomDetailsLayoutParams);
+
+                // Create a new TextView for the room
+                TextView textView = new TextView(this);
 
                 // Create a new Button for booking the room
                 Button button = new Button(this);
                 button.setText("Book Now");
+
 
                 // Set the Button layout parameters
                 RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
@@ -80,16 +90,32 @@ public class ResultsActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
                 );
                 buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM); // Align to the bottom of the parent
-                buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL); // Center horizontally
-                buttonParams.topMargin = 16; // Top margin
+                buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
                 button.setBackgroundColor(getResources().getColor(R.color.header_color));
                 button.setTextColor(getResources().getColor(R.color.white));
 
                 button.setLayoutParams(buttonParams);
 
-                // Create a new TextView for the room
-                TextView textView = new TextView(this);
 
+
+                // Get the available dates from the room
+                Map<Date, Date> availableDatesMap = room.getAvailableDates();
+
+                // Extract the fromDate and toDate from the map
+                Date fromDate = null;
+                Date toDate = null;
+                for (Map.Entry<Date, Date> entry : availableDatesMap.entrySet()) {
+                    fromDate = entry.getKey();
+                    toDate = entry.getValue();
+                }
+
+
+                // Create a SimpleDateFormat object for formatting the dates
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+
+                // Format the dates into strings
+                String fromDateStr = dateFormat.format(fromDate);
+                String toDateStr = dateFormat.format(toDate);
                 // Set the TextView text that will appear in the CardView
                 String roomDetails = room.getRoomName() + "\n" +
                         "Area: " + room.getArea() + "\n" +
@@ -97,9 +123,7 @@ public class ResultsActivity extends AppCompatActivity {
                         "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
                         "Capacity: " + room.getCapacity() + " people" + "\n" +
                         "Price: " + room.getPrice() + " €" + "\n" +
-                        "Available from: " + room.getFrom() + "\n" +
-                        "Available to: " + room.getTo() + "\n" +
-                        "available dates: " + room.getAvailableDates() + "\n";
+                        "available from:" + fromDateStr + " to " + toDateStr + "\n";
                 textView.setText(roomDetails);
                 textView.setTextSize(16);
 
@@ -115,6 +139,7 @@ public class ResultsActivity extends AppCompatActivity {
                 );
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP); // Align to the top of the parent
+                imageParams.topMargin = -50;
                 imageView.setLayoutParams(imageParams);
 
                 // Check if the room image bytes is not null
