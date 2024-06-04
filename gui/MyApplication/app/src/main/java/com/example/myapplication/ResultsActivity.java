@@ -18,8 +18,9 @@ import android.widget.Button;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.text.ParseException;
+
 import java.util.Map;
+import java.util.TreeMap;
 
 
 public class ResultsActivity extends AppCompatActivity {
@@ -97,75 +98,79 @@ public class ResultsActivity extends AppCompatActivity {
                 button.setLayoutParams(buttonParams);
 
 
+                // GETTING THE AVAILABLE DATES FOR THE ROOM AND DISPLAYING THEM
 
-                // Get the available dates from the room
                 Map<Date, Date> availableDatesMap = room.getAvailableDates();
+                System.out.println(availableDatesMap);
 
-                // Extract the fromDate and toDate from the map
-                Date fromDate = null;
-                Date toDate = null;
-                for (Map.Entry<Date, Date> entry : availableDatesMap.entrySet()) {
-                    fromDate = entry.getKey();
-                    toDate = entry.getValue();
+                /// Check if the map is not empty
+                if (!availableDatesMap.isEmpty()) {
+                    // Sort the entries by the key (start date)
+                    TreeMap<Date, Date> sortedDatesMap = new TreeMap<>(availableDatesMap);
+
+                    // Get the earliest fromDate and the latest toDate
+                    Date fromDate = sortedDatesMap.firstKey();
+                    Date toDate = sortedDatesMap.lastEntry().getValue();
+
+                    // Create a SimpleDateFormat object for formatting the dates
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+
+                    // Format the dates into strings
+                    String fromDateStr = dateFormat.format(fromDate);
+                    String toDateStr = dateFormat.format(toDate);
+
+                    // Set the TextView text that will appear in the CardView
+                    String roomDetails = room.getRoomName() + "\n" +
+                            "Area: " + room.getArea() + "\n" +
+                            "Rating: " + room.getRating() + "\n" +
+                            "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
+                            "Capacity: " + room.getCapacity() + " people" + "\n" +
+                            "Price: " + room.getPrice() + " €" + "\n" +
+                            "available from:" + fromDateStr + " to " + toDateStr + "\n";
+                    textView.setText(roomDetails);
+                    textView.setTextSize(16);
+
+                    roomDetailsLayout.addView(textView);
+                    roomDetailsLayout.addView(button);
+
+
+                    ImageView imageView = new ImageView(this);
+                    // Set the ImageView layout parameters
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
+                            400,  // Width in pixels
+                            400   // Height in pixels
+                    );
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP); // Align to the top of the parent
+                    imageParams.topMargin = -50;
+                    imageView.setLayoutParams(imageParams);
+
+                    // Check if the room image bytes is not null
+                    if (room.getRoomImage() != null) {
+                        // Decode the byte array into a Bitmap
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(room.getRoomImage(), 0, room.getRoomImage().length);
+
+                        // Set the Bitmap to the ImageView
+                        imageView.setImageBitmap(bitmap);
+                    }
+
+                    roomDetailsLayout.addView(imageView);
+                    cardView.addView(roomDetailsLayout);
+
+                    //adding the on click listener to go to the booking activity page
+                    button.setOnClickListener(v -> {
+                        // Create a new Intent to start the BookingActivity
+                        Intent intent = new Intent(ResultsActivity.this, BookingActivity.class);
+                        // Pass the room object to the BookingActivity
+                        intent.putExtra("room", room);
+                        intent.putExtra("room_details", roomDetails);
+                        intent.putExtra("image", room.getRoomImage());
+                        // Start the BookingActivity
+                        startActivity(intent);
+                    });
+                    resultsContainer.addView(cardView);
                 }
 
-
-                // Create a SimpleDateFormat object for formatting the dates
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-
-                // Format the dates into strings
-                String fromDateStr = dateFormat.format(fromDate);
-                String toDateStr = dateFormat.format(toDate);
-                // Set the TextView text that will appear in the CardView
-                String roomDetails = room.getRoomName() + "\n" +
-                        "Area: " + room.getArea() + "\n" +
-                        "Rating: " + room.getRating() + "\n" +
-                        "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
-                        "Capacity: " + room.getCapacity() + " people" + "\n" +
-                        "Price: " + room.getPrice() + " €" + "\n" +
-                        "available from:" + fromDateStr + " to " + toDateStr + "\n";
-                textView.setText(roomDetails);
-                textView.setTextSize(16);
-
-                roomDetailsLayout.addView(textView);
-                roomDetailsLayout.addView(button);
-
-
-                ImageView imageView = new ImageView(this);
-                // Set the ImageView layout parameters
-                RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
-                        400,  // Width in pixels
-                        400   // Height in pixels
-                );
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP); // Align to the top of the parent
-                imageParams.topMargin = -50;
-                imageView.setLayoutParams(imageParams);
-
-                // Check if the room image bytes is not null
-                if (room.getRoomImage() != null) {
-                    // Decode the byte array into a Bitmap
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(room.getRoomImage(), 0, room.getRoomImage().length);
-
-                    // Set the Bitmap to the ImageView
-                    imageView.setImageBitmap(bitmap);
-                }
-
-                roomDetailsLayout.addView(imageView);
-                cardView.addView(roomDetailsLayout);
-
-                //adding the on click listener to go to the booking activity page
-                button.setOnClickListener(v -> {
-                    // Create a new Intent to start the BookingActivity
-                    Intent intent = new Intent(ResultsActivity.this, BookingActivity.class);
-                    // Pass the room object to the BookingActivity
-                    intent.putExtra("room", room);
-                    intent.putExtra("room_details", roomDetails);
-                    intent.putExtra("image", room.getRoomImage());
-                    // Start the BookingActivity
-                    startActivity(intent);
-                });
-                resultsContainer.addView(cardView);
             }
         } else {
             // If there are no rooms, show a message
