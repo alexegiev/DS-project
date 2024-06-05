@@ -101,7 +101,7 @@ public class ResultsActivity extends AppCompatActivity {
                 // GETTING THE AVAILABLE DATES FOR THE ROOM AND DISPLAYING THEM
 
                 Map<Date, Date> availableDatesMap = room.getAvailableDates();
-                System.out.println(availableDatesMap);
+
 
                 /// Check if the map is not empty
                 if (!availableDatesMap.isEmpty()) {
@@ -109,15 +109,19 @@ public class ResultsActivity extends AppCompatActivity {
                     TreeMap<Date, Date> sortedDatesMap = new TreeMap<>(availableDatesMap);
 
                     // Get the earliest fromDate and the latest toDate
-                    Date fromDate = sortedDatesMap.firstKey();
-                    Date toDate = sortedDatesMap.lastEntry().getValue();
+                    Date first_fromDate = sortedDatesMap.firstKey();
+                    Date second_fromDate = sortedDatesMap.lastKey();
+                    Date first_toDate = sortedDatesMap.firstEntry().getValue();
+                    Date second_toDate = sortedDatesMap.lastEntry().getValue();
 
                     // Create a SimpleDateFormat object for formatting the dates
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
                     // Format the dates into strings
-                    String fromDateStr = dateFormat.format(fromDate);
-                    String toDateStr = dateFormat.format(toDate);
+                    String first_fromDateStr = dateFormat.format(first_fromDate);
+                    String second_fromDateStr = dateFormat.format(second_fromDate);
+                    String first_toDateStr = dateFormat.format(first_toDate);
+                    String second_toDateStr = dateFormat.format(second_toDate);
 
                     // Set the TextView text that will appear in the CardView
                     String roomDetails = room.getRoomName() + "\n" +
@@ -126,7 +130,8 @@ public class ResultsActivity extends AppCompatActivity {
                             "Number of Reviews: " + room.getNumberOfReviews() + "\n" +
                             "Capacity: " + room.getCapacity() + " people" + "\n" +
                             "Price: " + room.getPrice() + " €" + "\n" +
-                            "available from:" + fromDateStr + " to " + toDateStr + "\n";
+                            "Available dates :" + first_fromDateStr + " - " + first_toDateStr + "\n" +
+                            "and: " + second_fromDateStr + " - " + second_toDateStr + "\n";
                     textView.setText(roomDetails);
                     textView.setTextSize(16);
 
@@ -173,11 +178,11 @@ public class ResultsActivity extends AppCompatActivity {
 
             }
         } else {
-            // If there are no rooms, show a message
+            // Display a message if there are no rooms available
             TextView textView = new TextView(this);
-            textView.setText("No rooms found");
-            textView.setTextSize(16);
-            linearLayout.addView(textView);
+            textView.setText("No rooms available");
+            textView.setTextSize(24);
+            resultsContainer.addView(textView);
         }
     }
 }
