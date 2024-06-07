@@ -38,7 +38,11 @@ public class ClientThread extends Thread{
         try {
 
             // create a socket to connect to the server on port 9090
-            requestSocket = new Socket("192.168.2.9", 9090);
+            // IMPORTANT:
+            // 1) the master/server must be running before the client tries to connect
+            // 2) to successfully send the request to the master/server
+            //    change the below "localhost", to the IPV4 address of the machine that runs Master.java
+            requestSocket = new Socket("localhost", 9090);
 
             // create the streams to send and receive data from server
             out = new ObjectOutputStream(requestSocket.getOutputStream());
