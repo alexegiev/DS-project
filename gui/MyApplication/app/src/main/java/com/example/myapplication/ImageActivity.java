@@ -21,9 +21,6 @@ import android.widget.Toast;
 import android.content.Intent;
 import com.example.myapplication.backend.*;
 import com.example.myapplication.backend.entities.*;
-import java.util.List;
-
-
 
 
 public class ImageActivity extends AppCompatActivity {
@@ -35,6 +32,7 @@ public class ImageActivity extends AppCompatActivity {
 
     Client client = new Client();
 
+    //Showing the date picker and getting the date from the user
     private void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -46,10 +44,10 @@ public class ImageActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (startDate == null) {
+                        if (startDate == null) { //setting the start date
                             startDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                             userInput.setText(startDate);
-                        } else {
+                        } else {  //setting the end date and setting the format of the user input for the dates
                             endDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                             userInput.setText(startDate + " - " + endDate);
                         }
@@ -69,12 +67,12 @@ public class ImageActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.button);
         clearButton = findViewById(R.id.clearButton);
 
+        //setting the spinner adapter for the filter options
        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.filter_options, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(0);
-
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,14 +93,14 @@ public class ImageActivity extends AppCompatActivity {
                             showDatePickerDialog();
                         }
                     });
-                } else if (filter.equals("Capacity/People count") ||filter.equals("Price")||filter.equals("Rating")) { // handle the case when the filter is Capacity/People count,
-                    userInput.setInputType(InputType.TYPE_CLASS_NUMBER);                                               // Price or Rating
-                    userInput.setOnClickListener(null);
+                } else if (filter.equals("Capacity/People count") ||filter.equals("Price")||filter.equals("Rating")) { // handle the case when the filter is
+                    userInput.setInputType(InputType.TYPE_CLASS_NUMBER);                                               // Capacity/People count,
+                    userInput.setOnClickListener(null);                                                                // Price or Rating
                     startDate = null;
                     endDate = null;
                 }
         }
-
+            //handle the case when the user does not select any filter and prompt the user to select one before searching
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 searchButton.setEnabled(false);
@@ -116,6 +114,7 @@ public class ImageActivity extends AppCompatActivity {
                 String filter = spinner.getSelectedItem().toString();
                 String userInputText = userInput.getText().toString();
 
+                // Check if the user input is empty and prompt the user to enter some input before searching
                 if (userInputText.isEmpty()) {
                     Toast.makeText(ImageActivity.this, "Please enter some input before searching.", Toast.LENGTH_SHORT).show();
                     return;
@@ -129,16 +128,13 @@ public class ImageActivity extends AppCompatActivity {
                 // Set the Request object in the Client
                 client.setRequest(request);
 
-                System.out.println("User input textview: " + userInput);
-                System.out.println("User input string: " + userInputText);
-
 
                 // Check the filter type and perform the search
-                if (filter.equals("Area") || filter.equals("Room Name")) {
+                if (filter.equals("Area") || filter.equals("Room Name")) {  //case when the filter is Area or Room Name
                     Toast.makeText(ImageActivity.this, "Searching for " + filter + " with value: " + userInputText, Toast.LENGTH_SHORT).show();
 
-                } else if (filter.equals("Dates")) {// Split the user input by the "-" character
-                    String[] dates = userInputText.split(" - ");
+                } else if (filter.equals("Dates")) { // case when the filter is Dates
+                    String[] dates = userInputText.split(" - "); // Split the user input by the "-" character to check validity
                     if (dates.length != 2) {
                         Toast.makeText(ImageActivity.this, "Invalid date range. Please use dd/MM/yyyy - dd/MM/yyyy.", Toast.LENGTH_SHORT).show();
                         return;
@@ -157,10 +153,11 @@ public class ImageActivity extends AppCompatActivity {
                         Toast.makeText(ImageActivity.this, "Invalid date format. Please use dd/MM/yyyy - dd/MM/yyyy.", Toast.LENGTH_SHORT).show();
                     }
                 }
+                // case when filter is Capacity/People Count, Price, Rating
                 else if (filter.equals("Capacity/People count") || filter.equals("Price") || filter.equals("Rating")) {
-                    if (userInputText.matches("\\d+")) {
+                    if (userInputText.matches("\\d+")) { // check if input is valid
                         int userInputInt = Integer.parseInt(userInputText);
-                        if(userInputInt < 0){
+                        if(userInputInt < 0){ // checking if input is >0
                             Toast.makeText(ImageActivity.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -176,31 +173,24 @@ public class ImageActivity extends AppCompatActivity {
                     public void run() {
                         final Response response = client.searchRoom(filter, userInputText);
 
-                        // Use runOnUiThread to update the UI on the main thread
 
+                        // Use runOnUiThread to update the UI on the main thread
                        runOnUiThread(new Runnable() {
                            @Override
                            public void run() {
                                Intent intent = new Intent(ImageActivity.this, ResultsActivity.class);
                                intent.putExtra("response", response);
-                               System.out.println("Response in Image activity: " + response);
-
 
                                // Start the ResultsActivity
                                startActivity(intent);
                            }
                        });
-
-
-
                     }
                 }).start();
-
-
             }
-
         });
 
+        // clear button to clear all user input
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

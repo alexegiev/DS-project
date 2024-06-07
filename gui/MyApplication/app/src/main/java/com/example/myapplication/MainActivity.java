@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.Username);
         btn = (Button) findViewById(R.id.btn);
 
+        //listener for the login button
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Valid username: " + text);
                     Intent i = new Intent(getApplicationContext(),ImageActivity.class);
                     i.putExtra("text",text);
+
+                    // start Image Activity
                     startActivity(i);
                 }
                 else{

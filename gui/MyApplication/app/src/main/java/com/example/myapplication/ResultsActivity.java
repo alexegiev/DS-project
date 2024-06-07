@@ -18,7 +18,6 @@ import android.widget.Button;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -36,12 +35,12 @@ public class ResultsActivity extends AppCompatActivity {
         // Get the Response object from the Intent
         response = (Response) getIntent().getSerializableExtra("response");
 
+        // Get the rooms from the response
         if (response != null) {
-            // Get the rooms from the response
             rooms = response.getRooms();
         }
 
-        // Get the ScrollView from the layout
+        //get the container where results will be displayed
         LinearLayout resultsContainer = findViewById(R.id.results);
 
         // Create a new LinearLayout
@@ -65,10 +64,10 @@ public class ResultsActivity extends AppCompatActivity {
                 cardView.setRadius(16); // Corner radius
                 cardView.setCardElevation(8); // Elevation
                 cardView.setContentPadding(16, 16, 16, 16); // Padding
-                cardView.setCardBackgroundColor(getResources().getColor(R.color.results_containers_color));
+                cardView.setCardBackgroundColor(getResources().getColor(R.color.results_containers_color)); // colour
 
 
-                // Create a new RelativeLayout for the room details
+                // Create a new RelativeLayout for the room details/ text inside the card
                 RelativeLayout roomDetailsLayout = new RelativeLayout(this);
                 RelativeLayout.LayoutParams roomDetailsLayoutParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT, // Width
@@ -84,7 +83,6 @@ public class ResultsActivity extends AppCompatActivity {
                 Button button = new Button(this);
                 button.setText("Book Now");
 
-
                 // Set the Button layout parameters
                 RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
@@ -92,18 +90,17 @@ public class ResultsActivity extends AppCompatActivity {
                 );
                 buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM); // Align to the bottom of the parent
                 buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
-                button.setBackgroundColor(getResources().getColor(R.color.header_color));
-                button.setTextColor(getResources().getColor(R.color.white));
+                button.setBackgroundColor(getResources().getColor(R.color.header_color)); //button colour
+                button.setTextColor(getResources().getColor(R.color.white)); // button text colour
 
                 button.setLayoutParams(buttonParams);
 
 
-                // GETTING THE AVAILABLE DATES FOR THE ROOM AND DISPLAYING THEM
+                // Getting the available dates for the rooms and displaying them
 
                 Map<Date, Date> availableDatesMap = room.getAvailableDates();
 
-
-                /// Check if the map is not empty
+                // Check if the map is not empty
                 if (!availableDatesMap.isEmpty()) {
                     // Sort the entries by the key (start date)
                     TreeMap<Date, Date> sortedDatesMap = new TreeMap<>(availableDatesMap);
@@ -142,8 +139,8 @@ public class ResultsActivity extends AppCompatActivity {
                     ImageView imageView = new ImageView(this);
                     // Set the ImageView layout parameters
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
-                            400,  // Width in pixels
-                            400   // Height in pixels
+                            400,  // Width
+                            400      // Height
                     );
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // Align to the right of the parent
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP); // Align to the top of the parent
@@ -152,9 +149,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                     // Check if the room image bytes is not null
                     if (room.getRoomImage() != null) {
-                        // Decode the byte array into a Bitmap
                         Bitmap bitmap = BitmapFactory.decodeByteArray(room.getRoomImage(), 0, room.getRoomImage().length);
-
                         // Set the Bitmap to the ImageView
                         imageView.setImageBitmap(bitmap);
                     }
